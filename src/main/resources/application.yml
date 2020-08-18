@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: sofa-bolt-demo
+  profiles:
+    active: dev
