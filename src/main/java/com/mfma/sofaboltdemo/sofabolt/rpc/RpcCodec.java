@@ -31,13 +31,15 @@ import io.netty.channel.ChannelHandler;
  */
 public class RpcCodec implements Codec {
 
+
     @Override
     public ChannelHandler newEncoder() {
-        return new ProtocolCodeBasedEncoder(ProtocolCode.fromBytes(RpcProtocolV2.PROTOCOL_CODE));
+        return new ProtocolCodeBasedEncoder(ProtocolCode.fromBytes(RpcProtocolV2.PROTOCOL_CODE,RpcProtocolV2.PROTOCOL_VERSION));
     }
 
     @Override
     public ChannelHandler newDecoder() {
-        return new RpcProtocolDecoder(RpcProtocolManager.DEFAULT_PROTOCOL_CODE_LENGTH);
+//        return new RpcProtocolDecoder(RpcProtocolManager.DEFAULT_PROTOCOL_CODE_LENGTH);
+        return new RpcProtocolDecoder(ProtocolCode.fromBytes(RpcProtocolV2.PROTOCOL_CODE,RpcProtocolV2.PROTOCOL_VERSION));
     }
 }

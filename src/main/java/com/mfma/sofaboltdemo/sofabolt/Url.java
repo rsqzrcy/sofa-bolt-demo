@@ -49,10 +49,10 @@ public class Url {
     private int        connectTimeout;
 
     /** URL args: protocol */
-    private byte       protocol;
+    private String       protocol;
 
     /** URL args: version */
-    private byte       version = RpcProtocolV2.PROTOCOL_VERSION_1;
+    private String       version = RpcProtocolV2.PROTOCOL_CODE;
 
     /** URL agrs: connection number */
     private int        connNum = Configs.DEFAULT_CONN_NUM_PER_URL;
@@ -189,11 +189,11 @@ public class Url {
         this.connectTimeout = connectTimeout;
     }
 
-    public byte getProtocol() {
+    public String getProtocol() {
         return protocol;
     }
 
-    public void setProtocol(byte protocol) {
+    public void setProtocol(String protocol) {
         this.protocol = protocol;
     }
 
@@ -280,11 +280,11 @@ public class Url {
         }
     }
 
-    public byte getVersion() {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(byte version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 }

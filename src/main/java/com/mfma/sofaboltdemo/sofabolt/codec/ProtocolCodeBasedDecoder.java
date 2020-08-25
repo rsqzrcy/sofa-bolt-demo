@@ -16,16 +16,16 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.codec;
 
-import java.util.List;
-
 import com.mfma.sofaboltdemo.sofabolt.Connection;
 import com.mfma.sofaboltdemo.sofabolt.Protocol;
 import com.mfma.sofaboltdemo.sofabolt.ProtocolCode;
 import com.mfma.sofaboltdemo.sofabolt.ProtocolManager;
 import com.mfma.sofaboltdemo.sofabolt.exception.CodecException;
-
+import com.mfma.sofaboltdemo.util.NettyUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+
+import java.util.List;
 
 /**
  * Protocol code based decoder, the main decoder for a certain protocol, which is lead by one or multi bytes (magic code).
@@ -36,16 +36,19 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
     /** by default, suggest design a single byte for protocol version. */
-    public static final int DEFAULT_PROTOCOL_VERSION_LENGTH         = 1;
+//    public static final int DEFAULT_PROTOCOL_VERSION_LENGTH         = 1;
     /** protocol version should be a positive number, we use -1 to represent illegal */
-    public static final int DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH = -1;
+//    public static final int DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH = -1;
+
+    public static final int DEFAULT_DATA_LENGTH=4;
+
 
     /** the length of protocol code */
-    protected int           protocolCodeLength;
+    protected ProtocolCode           protocolCode;
 
-    public ProtocolCodeBasedDecoder(int protocolCodeLength) {
+    public ProtocolCodeBasedDecoder(ProtocolCode protocolCode) {
         super();
-        this.protocolCodeLength = protocolCodeLength;
+        this.protocolCode = protocolCode;
     }
 
     /**
@@ -55,38 +58,39 @@ public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
      * @return an instance of ProtocolCode
      */
     protected ProtocolCode decodeProtocolCode(ByteBuf in) {
-        if (in.readableBytes() >= protocolCodeLength) {
-            byte[] protocolCodeBytes = new byte[protocolCodeLength];
-            in.readBytes(protocolCodeBytes);
-            return ProtocolCode.fromBytes(protocolCodeBytes);
+        if (in.readableBytes() >= DEFAULT_DATA_LENGTH) {
+            byte[] protocolCodeBytes = new byte[DEFAULT_DATA_LENGTH];
+             in.readBytes(protocolCodeBytes);
+            String protocolHeader = NettyUtils.getHexString(in,2);
+            String protocolVersion = NettyUtils.getHexString(in,2);
+            return new ProtocolCode(protocolHeader,protocolVersion);
         }
         return null;
     }
 
-    /**
-     * decode the protocol version
-     *
-     * @param in input byte buf
-     * @return a byte to represent protocol version
-     */
-    protected byte decodeProtocolVersion(ByteBuf in) {
-        if (in.readableBytes() >= DEFAULT_PROTOCOL_VERSION_LENGTH) {
-            return in.readByte();
-        }
-        return DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH;
-    }
+//    /**
+//     * decode the protocol version
+//     *
+//     * @param in input byte buf
+//     * @return a byte to represent protocol version
+//     */
+//    protected byte decodeProtocolVersion(ByteBuf in) {
+//        if (in.readableBytes() >= DEFAULT_PROTOCOL_VERSION_LENGTH) {
+//            return in.readByte();
+//        }
+//        return DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH;
+//    }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         in.markReaderIndex();
         ProtocolCode protocolCode = decodeProtocolCode(in);
         if (null != protocolCode) {
-            byte protocolVersion = decodeProtocolVersion(in);
             if (ctx.channel().attr(Connection.PROTOCOL).get() == null) {
                 ctx.channel().attr(Connection.PROTOCOL).set(protocolCode);
-                if (DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH != protocolVersion) {
-                    ctx.channel().attr(Connection.VERSION).set(protocolVersion);
-                }
+//                if (DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH != protocolVersion) {
+                    ctx.channel().attr(Connection.VERSION).set(protocolCode.toString());
+//                }
             }
             Protocol protocol = ProtocolManager.getProtocol(protocolCode);
             if (null != protocol) {

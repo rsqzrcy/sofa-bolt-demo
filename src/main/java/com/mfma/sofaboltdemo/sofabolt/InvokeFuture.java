@@ -118,7 +118,7 @@ public interface InvokeFuture {
      * Get the protocol code of command.
      * @return protocol code
      */
-    byte getProtocolCode();
+    String getProtocolCode();
 
     /**
      * set invoke context

@@ -216,10 +216,10 @@ public class RpcAddressParser implements RemotingAddressParser {
         url.setConnectTimeout(connTimeout);
 
         String protocolStr = url.getProperty(RpcConfigs.URL_PROTOCOL);
-        byte protocol = RpcProtocol.PROTOCOL_CODE;
+        String protocol = RpcProtocolV2.PROTOCOL_CODE;
         if (StringUtils.isNotBlank(protocolStr)) {
             if (StringUtils.isNumeric(protocolStr)) {
-                protocol = Byte.parseByte(protocolStr);
+                protocol = protocolStr;
             } else {
                 throw new IllegalArgumentException(
                     "Url args illegal value of key [" + RpcConfigs.URL_PROTOCOL
@@ -230,10 +230,10 @@ public class RpcAddressParser implements RemotingAddressParser {
         url.setProtocol(protocol);
 
         String versionStr = url.getProperty(RpcConfigs.URL_VERSION);
-        byte version = RpcProtocolV2.PROTOCOL_VERSION_1;
+        String version = RpcProtocolV2.PROTOCOL_VERSION;
         if (StringUtils.isNotBlank(versionStr)) {
             if (StringUtils.isNumeric(versionStr)) {
-                version = Byte.parseByte(versionStr);
+                version = versionStr;
             } else {
                 throw new IllegalArgumentException(
                     "Url args illegal value of key [" + RpcConfigs.URL_VERSION

@@ -16,7 +16,10 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.util.Arrays;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
+import java.util.Objects;
 
 /**
  * Protocol code definition, you can define your own protocol code in byte array {@link ProtocolCode#version}
@@ -26,48 +29,80 @@ import java.util.Arrays;
  * @version $Id: ProtocolCode.java, v 0.1 2018-03-27 17:23 tsui Exp $
  */
 public class ProtocolCode {
-    /** bytes to represent protocol code */
-    byte[] version;
 
-    private ProtocolCode(byte... version) {
+    String header;
+
+    /**
+     * bytes to represent protocol code
+     */
+    String version;
+
+
+    public ProtocolCode(String header, String version) {
+        this.header = header;
         this.version = version;
     }
 
-    public static ProtocolCode fromBytes(byte... version) {
-        return new ProtocolCode(version);
+    public static ProtocolCode fromBytes(String protocolCode,String protocolVersion) {
+        return new ProtocolCode(protocolCode, protocolVersion);
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     /**
      * get the first single byte if your protocol code is single code.
+     *
      * @return
      */
-    public byte getFirstByte() {
-        return this.version[0];
+    public String getFirstByte() {
+        return this.header;
     }
 
-    public int length() {
-        return this.version.length;
-    }
+//    public int length() {
+//        return this.version.length;
+//    }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
-        }
+        } ;
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
         ProtocolCode that = (ProtocolCode) o;
-        return Arrays.equals(version, that.version);
+        return Objects.equals(header, that.header) &&
+                Objects.equals(version, that.version);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(version);
+        return Objects.hash(header, version);
     }
 
     @Override
     public String toString() {
-        return "ProtocolVersion{" + "version=" + Arrays.toString(version) + '}';
+        return "ProtocolCode{" +
+                "header='" + header + '\'' +
+                ", version='" + version + '\'' +
+                '}';
     }
+
+
+
 }

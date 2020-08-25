@@ -40,7 +40,7 @@ public interface RemotingServer extends Configurable, LifeCycle {
 
     /**
      * Stop the server. Use shutdown() instead.
-     *
+     * <p>
      * Remoting server can not be used any more after stop.
      * If you need, you should destroy it, and instantiate another one.
      */
@@ -64,20 +64,22 @@ public interface RemotingServer extends Configurable, LifeCycle {
     /**
      * Register processor for command with the command code.
      *
-     * @param protocolCode protocol code
-     * @param commandCode command code
-     * @param processor processor
+     * @param protocolHeader  protocol header
+     * @param protocolVersion protocol version
+     * @param commandCode     command code
+     * @param processor       processor
      */
-    void registerProcessor(byte protocolCode, CommandCode commandCode,
+    void registerProcessor(String protocolHeader, String protocolVersion, CommandCode commandCode,
                            RemotingProcessor<?> processor);
 
     /**
      * Register default executor service for server.
      *
-     * @param protocolCode protocol code
-     * @param executor the executor service for the protocol code
+     * @param protocolHeader  protocol header
+     * @param protocolVersion protocol version
+     * @param executor        the executor service for the protocol code
      */
-    void registerDefaultExecutor(byte protocolCode, ExecutorService executor);
+    void registerDefaultExecutor(String protocolHeader, String protocolVersion, ExecutorService executor);
 
     /**
      * Register user processor.

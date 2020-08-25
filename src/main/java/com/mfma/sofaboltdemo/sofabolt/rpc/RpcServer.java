@@ -431,20 +431,20 @@ public class RpcServer extends AbstractRemotingServer {
     }
 
     /**
-     * @see RemotingServer#registerProcessor(byte, com.mfma.sofaboltdemo.sofabolt.CommandCode, com.mfma.sofaboltdemo.sofabolt.RemotingProcessor)
+     * @see RemotingServer#registerProcessor(String protocolHeader,String protocolVersion, com.mfma.sofaboltdemo.sofabolt.CommandCode, com.mfma.sofaboltdemo.sofabolt.RemotingProcessor)
      */
     @Override
-    public void registerProcessor(byte protocolCode, CommandCode cmd, RemotingProcessor<?> processor) {
-        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolCode)).getCommandHandler()
+    public void registerProcessor(String protocolHeader, String protocolVersion,CommandCode cmd, RemotingProcessor<?> processor) {
+        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolHeader,protocolVersion)).getCommandHandler()
                 .registerProcessor(cmd, processor);
     }
 
     /**
-     * @see RemotingServer#registerDefaultExecutor(byte, ExecutorService)
+     * @see RemotingServer#registerDefaultExecutor(String protocolHeader,String protocolVersion, ExecutorService)
      */
     @Override
-    public void registerDefaultExecutor(byte protocolCode, ExecutorService executor) {
-        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolCode)).getCommandHandler()
+    public void registerDefaultExecutor(String protocolHeader, String protocolVersion,ExecutorService executor) {
+        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolHeader,protocolVersion)).getCommandHandler()
                 .registerDefaultExecutor(executor);
     }
 

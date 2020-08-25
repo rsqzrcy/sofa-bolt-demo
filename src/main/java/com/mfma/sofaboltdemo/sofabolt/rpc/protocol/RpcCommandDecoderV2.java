@@ -20,6 +20,7 @@ import java.net.InetSocketAddress;
 import java.util.List;
 
 import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
+import com.mfma.sofaboltdemo.util.NettyUtils;
 import org.slf4j.Logger;
 
 import com.mfma.sofaboltdemo.sofabolt.CommandCode;
@@ -61,9 +62,9 @@ public class RpcCommandDecoderV2 implements CommandDecoder {
         // the less length between response header and request header
         if (in.readableBytes() >= lessLen) {
             in.markReaderIndex();
-            byte protocol = in.readByte();
+            String protocol = NettyUtils.getHexString(in,2);
             in.resetReaderIndex();
-            if (protocol == RpcProtocolV2.PROTOCOL_CODE) {
+            if (protocol.equals(RpcProtocolV2.PROTOCOL_CODE)) {
                 /*
                  * ver: version for protocol
                  * type: request/response/request oneway
@@ -85,7 +86,7 @@ public class RpcCommandDecoderV2 implements CommandDecoder {
                     int startIndex = in.readerIndex();
                     in.markReaderIndex();
                     in.readByte(); //protocol code
-                    byte version = in.readByte(); //protocol version
+                    String version = NettyUtils.getHexString(in,2); //protocol version
                     byte type = in.readByte(); //type
                     if (type == RpcCommandType.REQUEST || type == RpcCommandType.REQUEST_ONEWAY) {
                         //decode request
@@ -113,9 +114,7 @@ public class RpcCommandDecoderV2 implements CommandDecoder {
                             }
 
                             // continue read
-                            if ((version == RpcProtocolV2.PROTOCOL_VERSION_1 && in.readableBytes() >= lengthAtLeastForV1)
-                                || (version == RpcProtocolV2.PROTOCOL_VERSION_2 && in
-                                    .readableBytes() >= lengthAtLeastForV2)) {
+                            if (version.equals(RpcProtocolV2.PROTOCOL_VERSION)&& in.readableBytes() >= lengthAtLeastForV2) {
                                 if (classLen > 0) {
                                     clazz = new byte[classLen];
                                     in.readBytes(clazz);
@@ -128,7 +127,7 @@ public class RpcCommandDecoderV2 implements CommandDecoder {
                                     content = new byte[contentLen];
                                     in.readBytes(content);
                                 }
-                                if (version == RpcProtocolV2.PROTOCOL_VERSION_2 && crcSwitchOn) {
+                                if (version.equals(RpcProtocolV2.PROTOCOL_VERSION) && crcSwitchOn) {
                                     checkCRC(in, startIndex);
                                 }
                             } else {// not enough data
@@ -181,9 +180,7 @@ public class RpcCommandDecoderV2 implements CommandDecoder {
                             }
 
                             // continue read
-                            if ((version == RpcProtocolV2.PROTOCOL_VERSION_1 && in.readableBytes() >= lengthAtLeastForV1)
-                                || (version == RpcProtocolV2.PROTOCOL_VERSION_2 && in
-                                    .readableBytes() >= lengthAtLeastForV2)) {
+                            if (version.equals(RpcProtocolV2.PROTOCOL_VERSION)&& in.readableBytes() >= lengthAtLeastForV2) {
                                 if (classLen > 0) {
                                     clazz = new byte[classLen];
                                     in.readBytes(clazz);
@@ -196,7 +193,7 @@ public class RpcCommandDecoderV2 implements CommandDecoder {
                                     content = new byte[contentLen];
                                     in.readBytes(content);
                                 }
-                                if (version == RpcProtocolV2.PROTOCOL_VERSION_2 && crcSwitchOn) {
+                                if (version.equals(RpcProtocolV2.PROTOCOL_VERSION)&& crcSwitchOn) {
                                     checkCRC(in, startIndex);
                                 }
                             } else {// not enough data

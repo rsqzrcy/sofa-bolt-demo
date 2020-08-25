@@ -67,11 +67,11 @@ import com.mfma.sofaboltdemo.sofabolt.rpc.RpcCommandFactory;
  */
 public class RpcProtocolV2 implements Protocol {
     /* because the design defect, the version is neglected in RpcProtocol, so we design RpcProtocolV2 and add protocol version. */
-    public static final byte PROTOCOL_CODE       = (byte) 2;
+    public static final String  PROTOCOL_CODE       = "FDFC";
     /** version 1, is the same with RpcProtocol */
-    public static final byte PROTOCOL_VERSION_1  = (byte) 1;
+    public static final String PROTOCOL_VERSION  = "0304";
     /** version 2, is the protocol version for RpcProtocolV2 */
-    public static final byte PROTOCOL_VERSION_2  = (byte) 2;
+//    public static final byte PROTOCOL_VERSION_2  = (byte) 2;
 
     /**
      * in contrast to protocol v1,

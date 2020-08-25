@@ -16,6 +16,7 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc.protocol;
 
+import com.mfma.sofaboltdemo.sofabolt.ProtocolCode;
 import com.mfma.sofaboltdemo.sofabolt.codec.ProtocolCodeBasedDecoder;
 
 import io.netty.buffer.ByteBuf;
@@ -27,21 +28,21 @@ import io.netty.buffer.ByteBuf;
  * @version $Id: RpcProtocolDecoder.java, v 0.1 2018-03-27 19:28 tsui Exp $
  */
 public class RpcProtocolDecoder extends ProtocolCodeBasedDecoder {
-    public static final int MIN_PROTOCOL_CODE_WITH_VERSION = 2;
+    public static final int MIN_PROTOCOL_CODE_WITH_VERSION = 4;
 
-    public RpcProtocolDecoder(int protocolCodeLength) {
-        super(protocolCodeLength);
+    public RpcProtocolDecoder(ProtocolCode protocolCode) {
+        super(protocolCode);
     }
 
-    @Override
-    protected byte decodeProtocolVersion(ByteBuf in) {
-        in.resetReaderIndex();
-        if (in.readableBytes() >= protocolCodeLength + DEFAULT_PROTOCOL_VERSION_LENGTH) {
-            byte rpcProtocolCodeByte = in.readByte();
-            if (rpcProtocolCodeByte >= MIN_PROTOCOL_CODE_WITH_VERSION) {
-                return in.readByte();
-            }
-        }
-        return DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH;
-    }
+//    @Override
+//    protected byte decodeProtocolVersion(ByteBuf in) {
+//        in.resetReaderIndex();
+//        if (in.readableBytes() >= protocolCodeLength + DEFAULT_PROTOCOL_VERSION_LENGTH) {
+//            byte rpcProtocolCodeByte = in.readByte();
+//            if (rpcProtocolCodeByte >= MIN_PROTOCOL_CODE_WITH_VERSION) {
+//                return in.readByte();
+//            }
+//        }
+//        return DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH;
+//    }
 }

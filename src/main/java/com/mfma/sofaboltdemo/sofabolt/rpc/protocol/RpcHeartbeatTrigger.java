@@ -18,15 +18,9 @@ package com.mfma.sofaboltdemo.sofabolt.rpc.protocol;
 
 import java.util.concurrent.TimeUnit;
 
+import com.mfma.sofaboltdemo.sofabolt.*;
 import org.slf4j.Logger;
 
-import com.mfma.sofaboltdemo.sofabolt.CommandFactory;
-import com.mfma.sofaboltdemo.sofabolt.Connection;
-import com.mfma.sofaboltdemo.sofabolt.HeartbeatTrigger;
-import com.mfma.sofaboltdemo.sofabolt.InvokeCallbackListener;
-import com.mfma.sofaboltdemo.sofabolt.InvokeFuture;
-import com.mfma.sofaboltdemo.sofabolt.ResponseStatus;
-import com.mfma.sofaboltdemo.sofabolt.TimerHolder;
 import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
 import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import com.mfma.sofaboltdemo.sofabolt.rpc.DefaultInvokeFuture;
@@ -82,7 +76,7 @@ public class RpcHeartbeatTrigger implements HeartbeatTrigger {
                 return;
             }
             final HeartbeatCommand heartbeat = new HeartbeatCommand();
-
+            ProtocolCode protocolCode = heartbeat.getProtocolCode();
             final InvokeFuture future = new DefaultInvokeFuture(heartbeat.getId(),
                 new InvokeCallbackListener() {
                     @Override
@@ -124,7 +118,7 @@ public class RpcHeartbeatTrigger implements HeartbeatTrigger {
                     public String getRemoteAddress() {
                         return ctx.channel().remoteAddress().toString();
                     }
-                }, null, heartbeat.getProtocolCode().getFirstByte(), this.commandFactory);
+                }, null, protocolCode.getHeader(), protocolCode.getVersion(),this.commandFactory);
             final int heartbeatId = heartbeat.getId();
             conn.addInvokeFuture(future);
             if (logger.isDebugEnabled()) {

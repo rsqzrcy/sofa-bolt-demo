@@ -64,6 +64,6 @@ public interface ConnectionFactory {
      * @param connectTimeout connect timeout in millisecond
      * @return connection
      */
-    Connection createConnection(String targetIP, int targetPort, byte version, int connectTimeout)
+    Connection createConnection(String targetIP, int targetPort, String version, int connectTimeout)
                                                                                                   throws Exception;
 }

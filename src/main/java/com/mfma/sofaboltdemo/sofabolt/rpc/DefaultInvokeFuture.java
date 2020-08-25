@@ -40,72 +40,74 @@ import io.netty.util.Timeout;
 
 /**
  * The default implementation of InvokeFuture.
- * 
+ *
  * @author jiangping
  * @version $Id: DefaultInvokeFuture.java, v 0.1 2015-9-27 PM6:30:22 tao Exp $
  */
 public class DefaultInvokeFuture implements InvokeFuture {
 
-    private static final Logger      logger                  = BoltLoggerFactory
-                                                                 .getLogger("RpcRemoting");
+    private static final Logger logger = BoltLoggerFactory.getLogger("RpcRemoting");
 
-    private int                      invokeId;
+    private int invokeId;
 
-    private InvokeCallbackListener   callbackListener;
+    private InvokeCallbackListener callbackListener;
 
-    private InvokeCallback           callback;
+    private InvokeCallback callback;
 
     private volatile ResponseCommand responseCommand;
 
-    private final CountDownLatch     countDownLatch          = new CountDownLatch(1);
+    private final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    private final AtomicBoolean      executeCallbackOnlyOnce = new AtomicBoolean(false);
+    private final AtomicBoolean executeCallbackOnlyOnce = new AtomicBoolean(false);
 
-    private Timeout                  timeout;
+    private Timeout timeout;
 
-    private Throwable                cause;
+    private Throwable cause;
 
-    private ClassLoader              classLoader;
+    private ClassLoader classLoader;
 
-    private byte                     protocol;
+    private String protocol;
 
-    private InvokeContext            invokeContext;
+    private String version;
 
-    private CommandFactory           commandFactory;
+    private InvokeContext invokeContext;
+
+    private CommandFactory commandFactory;
 
     /**
      * Constructor.
      *
-     * @param invokeId invoke id
+     * @param invokeId         invoke id
      * @param callbackListener callback listener
-     * @param callback callback
-     * @param protocol protocol code
-     * @param commandFactory command factory
+     * @param callback         callback
+     * @param protocol         protocol code
+     * @param commandFactory   command factory
      */
     public DefaultInvokeFuture(int invokeId, InvokeCallbackListener callbackListener,
-                               InvokeCallback callback, byte protocol, CommandFactory commandFactory) {
+                               InvokeCallback callback, String protocol,String version, CommandFactory commandFactory) {
         this.invokeId = invokeId;
         this.callbackListener = callbackListener;
         this.callback = callback;
         this.classLoader = Thread.currentThread().getContextClassLoader();
         this.protocol = protocol;
+        this.version =version;
         this.commandFactory = commandFactory;
     }
 
     /**
      * Constructor.
      *
-     * @param invokeId invoke id
+     * @param invokeId         invoke id
      * @param callbackListener callback listener
-     * @param callback callback
-     * @param protocol protocol
-     * @param commandFactory command factory
-     * @param invokeContext invoke context
+     * @param callback         callback
+     * @param protocol         protocol
+     * @param commandFactory   command factory
+     * @param invokeContext    invoke context
      */
     public DefaultInvokeFuture(int invokeId, InvokeCallbackListener callbackListener,
-                               InvokeCallback callback, byte protocol,
+                               InvokeCallback callback, String protocol,String version,
                                CommandFactory commandFactory, InvokeContext invokeContext) {
-        this(invokeId, callbackListener, callback, protocol, commandFactory);
+        this(invokeId, callbackListener, callback, protocol, version,commandFactory);
         this.invokeContext = invokeContext;
     }
 
@@ -126,7 +128,7 @@ public class DefaultInvokeFuture implements InvokeFuture {
         return this.commandFactory.createConnectionClosedResponse(responseHost, null);
     }
 
-    /** 
+    /**
      * @see com.mfma.sofaboltdemo.sofabolt.InvokeFuture#putResponse(com.mfma.sofaboltdemo.sofabolt.RemotingCommand)
      */
     @Override
@@ -136,7 +138,6 @@ public class DefaultInvokeFuture implements InvokeFuture {
     }
 
     /**
-     * 
      * @see com.mfma.sofaboltdemo.sofabolt.InvokeFuture#isDone()
      */
     @Override
@@ -149,7 +150,7 @@ public class DefaultInvokeFuture implements InvokeFuture {
         return this.classLoader;
     }
 
-    /** 
+    /**
      * @see com.mfma.sofaboltdemo.sofabolt.InvokeFuture#invokeId()
      */
     @Override
@@ -166,7 +167,7 @@ public class DefaultInvokeFuture implements InvokeFuture {
         }
     }
 
-    /** 
+    /**
      * @see com.mfma.sofaboltdemo.sofabolt.InvokeFuture#getInvokeCallback()
      */
     @Override
@@ -174,7 +175,7 @@ public class DefaultInvokeFuture implements InvokeFuture {
         return this.callback;
     }
 
-    /** 
+    /**
      * @see com.mfma.sofaboltdemo.sofabolt.InvokeFuture#addTimeout(io.netty.util.Timeout)
      */
     @Override
@@ -182,7 +183,7 @@ public class DefaultInvokeFuture implements InvokeFuture {
         this.timeout = timeout;
     }
 
-    /** 
+    /**
      * @see com.mfma.sofaboltdemo.sofabolt.InvokeFuture#cancelTimeout()
      */
     @Override
@@ -192,7 +193,7 @@ public class DefaultInvokeFuture implements InvokeFuture {
         }
     }
 
-    /** 
+    /**
      * @see com.mfma.sofaboltdemo.sofabolt.InvokeFuture#setCause(java.lang.Throwable)
      */
     @Override
@@ -200,7 +201,7 @@ public class DefaultInvokeFuture implements InvokeFuture {
         this.cause = cause;
     }
 
-    /** 
+    /**
      * @see com.mfma.sofaboltdemo.sofabolt.InvokeFuture#getCause()
      */
     @Override
@@ -208,11 +209,11 @@ public class DefaultInvokeFuture implements InvokeFuture {
         return this.cause;
     }
 
-    /** 
+    /**
      * @see com.mfma.sofaboltdemo.sofabolt.InvokeFuture#getProtocolCode()
      */
     @Override
-    public byte getProtocolCode() {
+    public String getProtocolCode() {
         return this.protocol;
     }
 
@@ -232,13 +233,13 @@ public class DefaultInvokeFuture implements InvokeFuture {
         return invokeContext;
     }
 
-    /** 
+    /**
      * @see com.mfma.sofaboltdemo.sofabolt.InvokeFuture#tryAsyncExecuteInvokeCallbackAbnormally()
      */
     @Override
     public void tryAsyncExecuteInvokeCallbackAbnormally() {
         try {
-            Protocol protocol = ProtocolManager.getProtocol(ProtocolCode.fromBytes(this.protocol));
+            Protocol protocol = ProtocolManager.getProtocol(ProtocolCode.fromBytes(this.protocol,this.version));
             if (null != protocol) {
                 CommandHandler commandHandler = protocol.getCommandHandler();
                 if (null != commandHandler) {
@@ -251,15 +252,15 @@ public class DefaultInvokeFuture implements InvokeFuture {
                                 try {
                                     if (DefaultInvokeFuture.this.getAppClassLoader() != null) {
                                         oldClassLoader = Thread.currentThread()
-                                            .getContextClassLoader();
+                                                .getContextClassLoader();
                                         Thread.currentThread().setContextClassLoader(
-                                            DefaultInvokeFuture.this.getAppClassLoader());
+                                                DefaultInvokeFuture.this.getAppClassLoader());
                                     }
                                     DefaultInvokeFuture.this.executeInvokeCallback();
                                 } finally {
                                     if (null != oldClassLoader) {
                                         Thread.currentThread()
-                                            .setContextClassLoader(oldClassLoader);
+                                                .setContextClassLoader(oldClassLoader);
                                     }
                                 }
                             }
@@ -267,7 +268,7 @@ public class DefaultInvokeFuture implements InvokeFuture {
                     }
                 } else {
                     logger.error("Executor null in commandHandler of protocolCode [{}].",
-                        this.protocol);
+                            this.protocol);
                 }
             } else {
                 logger.error("protocolCode [{}] not registered!", this.protocol);

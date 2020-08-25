@@ -155,7 +155,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
     @Override
     public Connection createConnection(Url url) throws Exception {
         Channel channel = doCreateConnection(url.getIp(), url.getPort(), url.getConnectTimeout());
-        Connection conn = new Connection(channel, ProtocolCode.fromBytes(url.getProtocol()),
+        Connection conn = new Connection(channel, ProtocolCode.fromBytes(url.getProtocol(),url.getVersion()),
             url.getVersion(), url);
         if (channel.isActive()) {
             channel.pipeline().fireUserEventTriggered(ConnectionEventType.CONNECT);
@@ -170,7 +170,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
                                                                                            throws Exception {
         Channel channel = doCreateConnection(targetIP, targetPort, connectTimeout);
         Connection conn = new Connection(channel,
-            ProtocolCode.fromBytes(RpcProtocol.PROTOCOL_CODE), RpcProtocolV2.PROTOCOL_VERSION_1,
+            ProtocolCode.fromBytes(RpcProtocolV2.PROTOCOL_CODE,RpcProtocolV2.PROTOCOL_VERSION), RpcProtocolV2.PROTOCOL_VERSION,
             new Url(targetIP, targetPort));
         if (channel.isActive()) {
             channel.pipeline().fireUserEventTriggered(ConnectionEventType.CONNECT);
@@ -181,11 +181,11 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
     }
 
     @Override
-    public Connection createConnection(String targetIP, int targetPort, byte version,
+    public Connection createConnection(String targetIP, int targetPort, String version,
                                        int connectTimeout) throws Exception {
         Channel channel = doCreateConnection(targetIP, targetPort, connectTimeout);
         Connection conn = new Connection(channel,
-            ProtocolCode.fromBytes(RpcProtocolV2.PROTOCOL_CODE), version, new Url(targetIP,
+            ProtocolCode.fromBytes(RpcProtocolV2.PROTOCOL_CODE,RpcProtocolV2.PROTOCOL_VERSION), version, new Url(targetIP,
                 targetPort));
         if (channel.isActive()) {
             channel.pipeline().fireUserEventTriggered(ConnectionEventType.CONNECT);

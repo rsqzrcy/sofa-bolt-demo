@@ -33,8 +33,8 @@ public class ProtocolManager {
         return protocols.get(protocolCode);
     }
 
-    public static void registerProtocol(Protocol protocol, byte... protocolCodeBytes) {
-        registerProtocol(protocol, ProtocolCode.fromBytes(protocolCodeBytes));
+    public static void registerProtocol(Protocol protocol, String protocolHeader,String protocolVersion) {
+        registerProtocol(protocol, ProtocolCode.fromBytes(protocolHeader,protocolVersion));
     }
 
     public static void registerProtocol(Protocol protocol, ProtocolCode protocolCode) {
@@ -48,7 +48,9 @@ public class ProtocolManager {
         }
     }
 
-    public static Protocol unRegisterProtocol(byte protocolCode) {
-        return ProtocolManager.protocols.remove(ProtocolCode.fromBytes(protocolCode));
+    public static Protocol unRegisterProtocol(String protocolHeader,String protocolVersion) {
+        return ProtocolManager.protocols.remove(ProtocolCode.fromBytes(protocolHeader,protocolVersion));
     }
+
+
 }
