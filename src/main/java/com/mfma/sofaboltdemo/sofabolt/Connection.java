@@ -16,6 +16,16 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
+import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
+import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocol;
+import com.mfma.sofaboltdemo.sofabolt.util.ConcurrentHashSet;
+import com.mfma.sofaboltdemo.sofabolt.util.RemotingUtil;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.util.AttributeKey;
+import org.slf4j.Logger;
+
 import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,18 +34,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.slf4j.Logger;
-
-import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
-import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocolV2;
-import com.mfma.sofaboltdemo.sofabolt.util.ConcurrentHashSet;
-import com.mfma.sofaboltdemo.sofabolt.util.RemotingUtil;
-
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.util.AttributeKey;
 
 /**
  * An abstraction of socket channel.
@@ -77,7 +75,7 @@ public class Connection {
      */
     public static final AttributeKey<String> VERSION = AttributeKey.valueOf("version");
 
-    private String version = RpcProtocolV2.PROTOCOL_VERSION;
+    private String version = RpcProtocol.PROTOCOL_VERSION;
 
     private Url url;
 

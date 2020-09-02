@@ -16,9 +16,9 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.net.InetSocketAddress;
-
 import io.netty.util.Timeout;
+
+import java.net.InetSocketAddress;
 
 /**
  * The future of an invocation.

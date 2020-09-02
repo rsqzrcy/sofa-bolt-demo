@@ -16,10 +16,10 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
+import com.mfma.sofaboltdemo.sofabolt.exception.RemotingException;
+
 import java.util.List;
 import java.util.Map;
-
-import com.mfma.sofaboltdemo.sofabolt.exception.RemotingException;
 
 /**
  * Connection manager of connection pool

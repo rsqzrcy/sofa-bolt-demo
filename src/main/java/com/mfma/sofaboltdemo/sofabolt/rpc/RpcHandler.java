@@ -16,19 +16,13 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
-import java.util.concurrent.ConcurrentHashMap;
-
-import com.mfma.sofaboltdemo.sofabolt.Connection;
-import com.mfma.sofaboltdemo.sofabolt.InvokeContext;
-import com.mfma.sofaboltdemo.sofabolt.Protocol;
-import com.mfma.sofaboltdemo.sofabolt.ProtocolCode;
-import com.mfma.sofaboltdemo.sofabolt.ProtocolManager;
-import com.mfma.sofaboltdemo.sofabolt.RemotingContext;
+import com.mfma.sofaboltdemo.sofabolt.*;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.UserProcessor;
-
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Dispatch messages to corresponding protocol.

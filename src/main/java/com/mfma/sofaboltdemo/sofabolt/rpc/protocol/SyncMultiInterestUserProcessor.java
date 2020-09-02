@@ -16,10 +16,10 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc.protocol;
 
-import java.util.List;
-
 import com.mfma.sofaboltdemo.sofabolt.AsyncContext;
 import com.mfma.sofaboltdemo.sofabolt.BizContext;
+
+import java.util.List;
 
 /**
  * Extends this to process user defined request in SYNC way.<br>

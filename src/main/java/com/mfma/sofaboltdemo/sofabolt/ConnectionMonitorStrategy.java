@@ -16,10 +16,10 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
+import com.mfma.sofaboltdemo.sofabolt.util.RunStateRecordedFutureTask;
+
 import java.util.List;
 import java.util.Map;
-
-import com.mfma.sofaboltdemo.sofabolt.util.RunStateRecordedFutureTask;
 
 /**
  * The strategy of connection monitor

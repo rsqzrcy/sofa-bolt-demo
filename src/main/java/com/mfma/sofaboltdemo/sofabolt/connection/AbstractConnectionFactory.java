@@ -16,51 +16,36 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.connection;
 
+import com.mfma.sofaboltdemo.sofabolt.*;
+import com.mfma.sofaboltdemo.sofabolt.codec.Codec;
+import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
+import com.mfma.sofaboltdemo.sofabolt.config.ConfigurableInstance;
+import com.mfma.sofaboltdemo.sofabolt.config.switches.GlobalSwitch;
+import com.mfma.sofaboltdemo.sofabolt.constant.Constants;
+import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
+import com.mfma.sofaboltdemo.sofabolt.rpc.RpcConfigManager;
+import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocol;
+import com.mfma.sofaboltdemo.sofabolt.util.IoUtils;
+import com.mfma.sofaboltdemo.sofabolt.util.NettyEventLoopUtil;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.buffer.UnpooledByteBufAllocator;
+import io.netty.channel.*;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.flush.FlushConsolidationHandler;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.SslHandler;
+import io.netty.handler.timeout.IdleStateHandler;
+import org.slf4j.Logger;
+
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.TrustManagerFactory;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.security.KeyStore;
 import java.util.concurrent.TimeUnit;
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.TrustManagerFactory;
-
-import org.slf4j.Logger;
-
-import com.mfma.sofaboltdemo.sofabolt.Connection;
-import com.mfma.sofaboltdemo.sofabolt.ConnectionEventHandler;
-import com.mfma.sofaboltdemo.sofabolt.ConnectionEventType;
-import com.mfma.sofaboltdemo.sofabolt.NamedThreadFactory;
-import com.mfma.sofaboltdemo.sofabolt.ProtocolCode;
-import com.mfma.sofaboltdemo.sofabolt.Url;
-import com.mfma.sofaboltdemo.sofabolt.codec.Codec;
-import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
-import com.mfma.sofaboltdemo.sofabolt.config.ConfigurableInstance;
-import com.mfma.sofaboltdemo.sofabolt.constant.Constants;
-import com.mfma.sofaboltdemo.sofabolt.config.switches.GlobalSwitch;
-import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
-import com.mfma.sofaboltdemo.sofabolt.rpc.RpcConfigManager;
-import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocol;
-import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocolV2;
-import com.mfma.sofaboltdemo.sofabolt.util.IoUtils;
-import com.mfma.sofaboltdemo.sofabolt.util.NettyEventLoopUtil;
-
-import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.buffer.UnpooledByteBufAllocator;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.WriteBufferWaterMark;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.SslHandler;
-import io.netty.handler.flush.FlushConsolidationHandler;
-import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * ConnectionFactory to create connection.
@@ -170,7 +155,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
                                                                                            throws Exception {
         Channel channel = doCreateConnection(targetIP, targetPort, connectTimeout);
         Connection conn = new Connection(channel,
-            ProtocolCode.fromBytes(RpcProtocolV2.PROTOCOL_CODE,RpcProtocolV2.PROTOCOL_VERSION), RpcProtocolV2.PROTOCOL_VERSION,
+            ProtocolCode.fromBytes(RpcProtocol.PROTOCOL_HEADER, RpcProtocol.PROTOCOL_VERSION), RpcProtocol.PROTOCOL_VERSION,
             new Url(targetIP, targetPort));
         if (channel.isActive()) {
             channel.pipeline().fireUserEventTriggered(ConnectionEventType.CONNECT);
@@ -185,7 +170,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
                                        int connectTimeout) throws Exception {
         Channel channel = doCreateConnection(targetIP, targetPort, connectTimeout);
         Connection conn = new Connection(channel,
-            ProtocolCode.fromBytes(RpcProtocolV2.PROTOCOL_CODE,RpcProtocolV2.PROTOCOL_VERSION), version, new Url(targetIP,
+            ProtocolCode.fromBytes(RpcProtocol.PROTOCOL_HEADER, RpcProtocol.PROTOCOL_VERSION), version, new Url(targetIP,
                 targetPort));
         if (channel.isActive()) {
             channel.pipeline().fireUserEventTriggered(ConnectionEventType.CONNECT);

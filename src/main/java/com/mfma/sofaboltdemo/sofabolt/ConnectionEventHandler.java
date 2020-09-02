@@ -16,25 +16,23 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.net.SocketAddress;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.config.switches.GlobalSwitch;
 import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import com.mfma.sofaboltdemo.sofabolt.util.RemotingUtil;
 import com.mfma.sofaboltdemo.sofabolt.util.StringUtils;
-
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.util.Attribute;
+import org.slf4j.Logger;
+
+import java.net.SocketAddress;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Log the channel status event.

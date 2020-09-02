@@ -16,10 +16,10 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc.protocol;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.mfma.sofaboltdemo.sofabolt.AsyncContext;
 import com.mfma.sofaboltdemo.sofabolt.RemotingContext;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Async biz context of Rpc.

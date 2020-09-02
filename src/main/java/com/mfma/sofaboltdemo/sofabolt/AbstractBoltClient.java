@@ -16,11 +16,7 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import com.mfma.sofaboltdemo.sofabolt.config.BoltOption;
-import com.mfma.sofaboltdemo.sofabolt.config.BoltOptions;
-import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
-import com.mfma.sofaboltdemo.sofabolt.config.Configurable;
-import com.mfma.sofaboltdemo.sofabolt.config.ConfigurableInstance;
+import com.mfma.sofaboltdemo.sofabolt.config.*;
 import com.mfma.sofaboltdemo.sofabolt.config.configs.ConfigContainer;
 import com.mfma.sofaboltdemo.sofabolt.config.configs.ConfigItem;
 import com.mfma.sofaboltdemo.sofabolt.config.configs.ConfigType;

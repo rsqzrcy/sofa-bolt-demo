@@ -16,11 +16,11 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.util;
 
+import io.netty.channel.Channel;
+
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-
-import io.netty.channel.Channel;
 
 /**
  * Some utilities for remoting.

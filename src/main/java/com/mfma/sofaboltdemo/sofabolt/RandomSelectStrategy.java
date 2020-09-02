@@ -16,16 +16,15 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.config.Configs;
 import com.mfma.sofaboltdemo.sofabolt.config.switches.GlobalSwitch;
 import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import com.mfma.sofaboltdemo.sofabolt.util.StringUtils;
+import org.slf4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Select a connection randomly

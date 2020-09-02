@@ -16,9 +16,9 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.config.switches;
 
-import java.util.BitSet;
-
 import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
+
+import java.util.BitSet;
 
 /**
  * Global switches used in client or server

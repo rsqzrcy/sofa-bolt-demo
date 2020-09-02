@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * @author mfma
+ */
 @Slf4j
 @SpringBootApplication
 public class SofaBoltDemoApplication {
@@ -19,5 +22,7 @@ public class SofaBoltDemoApplication {
             log.error("RpcServer启动失败");
         }
     }
+
+
 
 }

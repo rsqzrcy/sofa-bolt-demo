@@ -16,10 +16,10 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
-import java.net.InetSocketAddress;
-
 import com.mfma.sofaboltdemo.sofabolt.CommandCode;
 import com.mfma.sofaboltdemo.sofabolt.ResponseStatus;
+
+import java.net.InetSocketAddress;
 
 /**
  * Command of response.

@@ -18,7 +18,6 @@ package com.mfma.sofaboltdemo.sofabolt.util;
 
 import com.mfma.sofaboltdemo.sofabolt.Connection;
 import com.mfma.sofaboltdemo.sofabolt.InvokeFuture;
-
 import io.netty.channel.Channel;
 import io.netty.util.Attribute;
 

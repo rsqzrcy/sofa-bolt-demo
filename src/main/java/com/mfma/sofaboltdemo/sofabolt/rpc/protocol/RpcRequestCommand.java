@@ -16,8 +16,6 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc.protocol;
 
-import java.io.UnsupportedEncodingException;
-
 import com.mfma.sofaboltdemo.sofabolt.CustomSerializer;
 import com.mfma.sofaboltdemo.sofabolt.CustomSerializerManager;
 import com.mfma.sofaboltdemo.sofabolt.InvokeContext;
@@ -27,6 +25,8 @@ import com.mfma.sofaboltdemo.sofabolt.exception.SerializationException;
 import com.mfma.sofaboltdemo.sofabolt.rpc.RequestCommand;
 import com.mfma.sofaboltdemo.sofabolt.serialization.SerializerManager;
 import com.mfma.sofaboltdemo.sofabolt.util.IDGenerator;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * Request command for Rpc.

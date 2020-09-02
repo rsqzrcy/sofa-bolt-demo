@@ -16,15 +16,13 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import com.mfma.sofaboltdemo.sofabolt.util.RemotingUtil;
-
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
+import org.slf4j.Logger;
 
 /**
  * Server Idle handler.

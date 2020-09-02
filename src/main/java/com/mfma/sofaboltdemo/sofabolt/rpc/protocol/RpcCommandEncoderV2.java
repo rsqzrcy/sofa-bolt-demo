@@ -16,24 +16,21 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc.protocol;
 
-import java.io.Serializable;
-
-import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
-import com.mfma.sofaboltdemo.util.NettyUtils;
-import io.netty.buffer.ByteBufUtil;
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.CommandEncoder;
 import com.mfma.sofaboltdemo.sofabolt.Connection;
 import com.mfma.sofaboltdemo.sofabolt.config.switches.ProtocolSwitch;
+import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import com.mfma.sofaboltdemo.sofabolt.rpc.RequestCommand;
 import com.mfma.sofaboltdemo.sofabolt.rpc.ResponseCommand;
 import com.mfma.sofaboltdemo.sofabolt.rpc.RpcCommand;
 import com.mfma.sofaboltdemo.sofabolt.util.CrcUtil;
-
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.Attribute;
+import org.slf4j.Logger;
+
+import java.io.Serializable;
 
 /**
  * Encode remoting command into ByteBuf v2.
@@ -73,9 +70,9 @@ public class RpcCommandEncoderV2 implements CommandEncoder {
                  */
                 int index = out.writerIndex();
                 RpcCommand cmd = (RpcCommand) msg;
-                out.writeBytes(ByteBufUtil.decodeHexDump(RpcProtocolV2.PROTOCOL_CODE));
+                out.writeBytes(ByteBufUtil.decodeHexDump(RpcProtocol.PROTOCOL_HEADER));
                 Attribute<String> version = ctx.channel().attr(Connection.VERSION);
-                String ver = RpcProtocolV2.PROTOCOL_VERSION;
+                String ver = RpcProtocol.PROTOCOL_VERSION;
                 if (version != null && version.get() != null) {
                     ver = version.get();
                 }
@@ -107,7 +104,7 @@ public class RpcCommandEncoderV2 implements CommandEncoder {
                 if (cmd.getContentLength() > 0) {
                     out.writeBytes(cmd.getContent());
                 }
-                if (ver.equals(RpcProtocolV2.PROTOCOL_VERSION) && cmd.getProtocolSwitch().isOn(ProtocolSwitch.CRC_SWITCH_INDEX)) {
+                if (ver.equals(RpcProtocol.PROTOCOL_VERSION) && cmd.getProtocolSwitch().isOn(ProtocolSwitch.CRC_SWITCH_INDEX)) {
                     // compute the crc32 and write to out
                     byte[] frame = new byte[out.readableBytes()];
                     out.getBytes(index, frame);

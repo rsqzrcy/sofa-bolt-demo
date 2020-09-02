@@ -16,9 +16,6 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
 import java.util.Objects;
 
 /**
@@ -36,7 +33,6 @@ public class ProtocolCode {
      * bytes to represent protocol code
      */
     String version;
-
 
     public ProtocolCode(String header, String version) {
         this.header = header;
@@ -63,20 +59,6 @@ public class ProtocolCode {
         this.version = version;
     }
 
-    /**
-     * get the first single byte if your protocol code is single code.
-     *
-     * @return
-     */
-    public String getFirstByte() {
-        return this.header;
-    }
-
-//    public int length() {
-//        return this.version.length;
-//    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -97,12 +79,7 @@ public class ProtocolCode {
 
     @Override
     public String toString() {
-        return "ProtocolCode{" +
-                "header='" + header + '\'' +
-                ", version='" + version + '\'' +
-                '}';
+        return "ProtocolCode{"+header +","+ version+"}";
     }
-
-
 
 }

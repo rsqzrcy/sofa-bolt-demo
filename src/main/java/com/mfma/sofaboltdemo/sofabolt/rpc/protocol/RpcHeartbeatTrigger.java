@@ -16,23 +16,21 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc.protocol;
 
-import java.util.concurrent.TimeUnit;
-
 import com.mfma.sofaboltdemo.sofabolt.*;
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
 import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import com.mfma.sofaboltdemo.sofabolt.rpc.DefaultInvokeFuture;
 import com.mfma.sofaboltdemo.sofabolt.rpc.HeartbeatCommand;
 import com.mfma.sofaboltdemo.sofabolt.rpc.ResponseCommand;
 import com.mfma.sofaboltdemo.sofabolt.util.RemotingUtil;
-
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.Timeout;
 import io.netty.util.TimerTask;
+import org.slf4j.Logger;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Handler for heart beat.

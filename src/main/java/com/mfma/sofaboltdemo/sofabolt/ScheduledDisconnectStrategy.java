@@ -16,20 +16,19 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
 import com.mfma.sofaboltdemo.sofabolt.config.Configs;
 import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import com.mfma.sofaboltdemo.sofabolt.util.FutureTaskUtil;
 import com.mfma.sofaboltdemo.sofabolt.util.RemotingUtil;
 import com.mfma.sofaboltdemo.sofabolt.util.RunStateRecordedFutureTask;
+import org.slf4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * An implemented strategy to monitor connections:

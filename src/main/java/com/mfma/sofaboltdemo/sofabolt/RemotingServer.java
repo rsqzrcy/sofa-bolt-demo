@@ -16,10 +16,10 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.util.concurrent.ExecutorService;
-
 import com.mfma.sofaboltdemo.sofabolt.config.Configurable;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.UserProcessor;
+
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author chengyi (mark.lx@antfin.com) 2018-06-16 06:55

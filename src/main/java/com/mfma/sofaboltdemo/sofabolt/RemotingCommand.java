@@ -16,11 +16,11 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.io.Serializable;
-
 import com.mfma.sofaboltdemo.sofabolt.config.switches.ProtocolSwitch;
 import com.mfma.sofaboltdemo.sofabolt.exception.DeserializationException;
 import com.mfma.sofaboltdemo.sofabolt.exception.SerializationException;
+
+import java.io.Serializable;
 
 /**
  * Remoting command.

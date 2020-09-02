@@ -16,9 +16,9 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc.protocol;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.mfma.sofaboltdemo.sofabolt.util.StringUtils;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author muyun.cyt (muyun.cyt@antfin.com)  2018/7/5   11:22 AM

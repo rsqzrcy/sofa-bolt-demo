@@ -16,11 +16,11 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.mfma.sofaboltdemo.sofabolt.config.ConfigurableInstance;
 import com.mfma.sofaboltdemo.sofabolt.connection.DefaultConnectionFactory;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.UserProcessor;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Default RPC connection factory impl.

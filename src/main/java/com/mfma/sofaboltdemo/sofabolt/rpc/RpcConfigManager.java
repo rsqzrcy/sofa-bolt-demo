@@ -16,9 +16,10 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
+import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
+
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
-import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
 
 /**
  * RPC framework config manager.

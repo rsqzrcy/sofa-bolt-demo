@@ -16,21 +16,16 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.net.InetSocketAddress;
-
-import com.mfma.sofaboltdemo.sofabolt.config.BoltOption;
-import com.mfma.sofaboltdemo.sofabolt.config.BoltOptions;
-import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
-import com.mfma.sofaboltdemo.sofabolt.config.Configurable;
-import com.mfma.sofaboltdemo.sofabolt.config.ConfigurableInstance;
+import com.mfma.sofaboltdemo.sofabolt.config.*;
 import com.mfma.sofaboltdemo.sofabolt.config.configs.ConfigContainer;
 import com.mfma.sofaboltdemo.sofabolt.config.configs.ConfigItem;
+import com.mfma.sofaboltdemo.sofabolt.config.configs.ConfigType;
 import com.mfma.sofaboltdemo.sofabolt.config.configs.DefaultConfigContainer;
 import com.mfma.sofaboltdemo.sofabolt.config.switches.GlobalSwitch;
+import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import org.slf4j.Logger;
 
-import com.mfma.sofaboltdemo.sofabolt.config.configs.ConfigType;
-import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
+import java.net.InetSocketAddress;
 
 /**
  * Server template for remoting.

@@ -17,7 +17,6 @@
 package com.mfma.sofaboltdemo.sofabolt;
 
 import com.mfma.sofaboltdemo.sofabolt.util.RemotingUtil;
-
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 

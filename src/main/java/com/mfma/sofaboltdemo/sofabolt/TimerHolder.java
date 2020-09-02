@@ -16,10 +16,10 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.util.concurrent.TimeUnit;
-
 import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timer;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * A singleton holder of the timer for timeout.

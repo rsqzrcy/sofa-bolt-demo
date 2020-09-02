@@ -16,13 +16,11 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
+import com.mfma.sofaboltdemo.protocol.ProtocolDecoder;
 import com.mfma.sofaboltdemo.sofabolt.ProtocolCode;
 import com.mfma.sofaboltdemo.sofabolt.codec.Codec;
 import com.mfma.sofaboltdemo.sofabolt.codec.ProtocolCodeBasedEncoder;
-import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocolDecoder;
-import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocolManager;
-import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocolV2;
-
+import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocol;
 import io.netty.channel.ChannelHandler;
 
 /**
@@ -34,12 +32,11 @@ public class RpcCodec implements Codec {
 
     @Override
     public ChannelHandler newEncoder() {
-        return new ProtocolCodeBasedEncoder(ProtocolCode.fromBytes(RpcProtocolV2.PROTOCOL_CODE,RpcProtocolV2.PROTOCOL_VERSION));
+        return new ProtocolCodeBasedEncoder(ProtocolCode.fromBytes(RpcProtocol.PROTOCOL_HEADER, RpcProtocol.PROTOCOL_VERSION));
     }
 
     @Override
     public ChannelHandler newDecoder() {
-//        return new RpcProtocolDecoder(RpcProtocolManager.DEFAULT_PROTOCOL_CODE_LENGTH);
-        return new RpcProtocolDecoder(ProtocolCode.fromBytes(RpcProtocolV2.PROTOCOL_CODE,RpcProtocolV2.PROTOCOL_VERSION));
+        return new ProtocolDecoder(ProtocolCode.fromBytes(RpcProtocol.PROTOCOL_HEADER, RpcProtocol.PROTOCOL_VERSION));
     }
 }

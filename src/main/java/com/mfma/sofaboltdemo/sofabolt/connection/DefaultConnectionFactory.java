@@ -18,7 +18,6 @@ package com.mfma.sofaboltdemo.sofabolt.connection;
 
 import com.mfma.sofaboltdemo.sofabolt.codec.Codec;
 import com.mfma.sofaboltdemo.sofabolt.config.ConfigurableInstance;
-
 import io.netty.channel.ChannelHandler;
 
 /**

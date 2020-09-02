@@ -20,7 +20,6 @@ import com.mfma.sofaboltdemo.sofabolt.Connection;
 import com.mfma.sofaboltdemo.sofabolt.Protocol;
 import com.mfma.sofaboltdemo.sofabolt.ProtocolCode;
 import com.mfma.sofaboltdemo.sofabolt.ProtocolManager;
-
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;

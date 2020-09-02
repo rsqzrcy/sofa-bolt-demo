@@ -16,18 +16,17 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc.protocol;
 
-import java.io.Serializable;
-
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.CommandEncoder;
 import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import com.mfma.sofaboltdemo.sofabolt.rpc.RequestCommand;
 import com.mfma.sofaboltdemo.sofabolt.rpc.ResponseCommand;
 import com.mfma.sofaboltdemo.sofabolt.rpc.RpcCommand;
-
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
+import org.slf4j.Logger;
+
+import java.io.Serializable;
 
 /**
  * Encode remoting command into ByteBuf.
@@ -63,7 +62,7 @@ public class RpcCommandEncoder implements CommandEncoder {
                  * content
                  */
                 RpcCommand cmd = (RpcCommand) msg;
-                out.writeByte(RpcProtocol.PROTOCOL_CODE);
+                out.writeBytes(ByteBufUtil.decodeHexDump(RpcProtocol.PROTOCOL_HEADER));
                 out.writeByte(cmd.getType());
                 out.writeShort(((RpcCommand) msg).getCmdCode().value());
                 out.writeByte(cmd.getVersion());

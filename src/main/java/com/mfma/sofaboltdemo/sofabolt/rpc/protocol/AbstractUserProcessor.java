@@ -16,12 +16,12 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc.protocol;
 
-import java.util.concurrent.Executor;
-
 import com.mfma.sofaboltdemo.sofabolt.AbstractLifeCycle;
 import com.mfma.sofaboltdemo.sofabolt.BizContext;
 import com.mfma.sofaboltdemo.sofabolt.DefaultBizContext;
 import com.mfma.sofaboltdemo.sofabolt.RemotingContext;
+
+import java.util.concurrent.Executor;
 
 /**
  * Implements common function and provide default value.

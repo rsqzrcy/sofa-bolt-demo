@@ -16,16 +16,11 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
 import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
+import org.slf4j.Logger;
+
+import java.util.concurrent.*;
 
 /**
  * Manager of processors<br>

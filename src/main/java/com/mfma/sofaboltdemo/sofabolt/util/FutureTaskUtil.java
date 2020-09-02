@@ -16,9 +16,9 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.util;
 
-import java.util.concurrent.ExecutionException;
-
 import org.slf4j.Logger;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Utils for future task

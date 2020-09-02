@@ -28,6 +28,6 @@ public class RpcProtocolManager {
     public static final int DEFAULT_PROTOCOL_CODE_LENGTH = 4;
 
     public static void initProtocols() {
-        ProtocolManager.registerProtocol(new RpcProtocolV2(), RpcProtocolV2.PROTOCOL_CODE,RpcProtocolV2.PROTOCOL_VERSION);
+        ProtocolManager.registerProtocol(new RpcProtocol(), RpcProtocol.PROTOCOL_HEADER, RpcProtocol.PROTOCOL_VERSION);
     }
 }

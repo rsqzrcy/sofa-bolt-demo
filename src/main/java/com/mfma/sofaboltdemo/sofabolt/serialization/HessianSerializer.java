@@ -16,14 +16,14 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.serialization;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import com.mfma.sofaboltdemo.sofabolt.exception.CodecException;
 import com.caucho.hessian.io.Hessian2Input;
 import com.caucho.hessian.io.Hessian2Output;
 import com.caucho.hessian.io.SerializerFactory;
+import com.mfma.sofaboltdemo.sofabolt.exception.CodecException;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Hessian2 serializer.

@@ -16,21 +16,9 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.InetSocketAddress;
-import java.security.KeyStore;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLEngine;
-
 import com.mfma.sofaboltdemo.sofabolt.*;
-import com.mfma.sofaboltdemo.sofabolt.config.BoltGenericOption;
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.codec.Codec;
+import com.mfma.sofaboltdemo.sofabolt.config.BoltGenericOption;
 import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
 import com.mfma.sofaboltdemo.sofabolt.config.switches.GlobalSwitch;
 import com.mfma.sofaboltdemo.sofabolt.constant.Constants;
@@ -41,25 +29,29 @@ import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.UserProcessorRegisterHelper;
 import com.mfma.sofaboltdemo.sofabolt.util.IoUtils;
 import com.mfma.sofaboltdemo.sofabolt.util.NettyEventLoopUtil;
 import com.mfma.sofaboltdemo.sofabolt.util.RemotingUtil;
-
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.UnpooledByteBufAllocator;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.WriteBufferWaterMark;
+import io.netty.channel.*;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.flush.FlushConsolidationHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslHandler;
-import io.netty.handler.flush.FlushConsolidationHandler;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.slf4j.Logger;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLEngine;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.security.KeyStore;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Server for Rpc.
@@ -270,10 +262,8 @@ public class RpcServer extends AbstractRemotingServer {
             this.connectionEventHandler.setConnectionEventListener(this.connectionEventListener);
         }
         initRpcRemoting();
-
         Integer tcpSoSndBuf = option(BoltGenericOption.TCP_SO_SNDBUF);
         Integer tcpSoRcvBuf = option(BoltGenericOption.TCP_SO_RCVBUF);
-
         this.bootstrap = new ServerBootstrap();
         this.bootstrap
                 .group(bossGroup, workerGroup)
@@ -286,10 +276,8 @@ public class RpcServer extends AbstractRemotingServer {
                         tcpSoSndBuf != null ? tcpSoSndBuf : ConfigManager.tcp_so_sndbuf())
                 .childOption(ChannelOption.SO_RCVBUF,
                         tcpSoRcvBuf != null ? tcpSoRcvBuf : ConfigManager.tcp_so_rcvbuf());
-
         // set write buffer water mark
         initWriteBufferWaterMark();
-
         // init byte buf allocator
         if (ConfigManager.netty_buffer_pooled()) {
             this.bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
@@ -298,18 +286,14 @@ public class RpcServer extends AbstractRemotingServer {
             this.bootstrap.option(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT)
                     .childOption(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT);
         }
-
         // enable trigger mode for epoll if need
         NettyEventLoopUtil.enableTriggeredMode(bootstrap);
-
         final boolean idleSwitch = ConfigManager.tcp_idle_switch();
-        final boolean flushConsolidationSwitch = switches().isOn(
-                GlobalSwitch.CODEC_FLUSH_CONSOLIDATION);
+        final boolean flushConsolidationSwitch = switches().isOn(GlobalSwitch.CODEC_FLUSH_CONSOLIDATION);
         final int idleTime = ConfigManager.tcp_server_idle();
         final ChannelHandler serverIdleHandler = new ServerIdleHandler();
         final RpcHandler rpcHandler = new RpcHandler(true, this.userProcessors);
         this.bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
-
             @Override
             protected void initChannel(SocketChannel channel) {
                 ChannelPipeline pipeline = channel.pipeline();
@@ -319,16 +303,13 @@ public class RpcServer extends AbstractRemotingServer {
                     engine.setNeedClientAuth(RpcConfigManager.server_ssl_need_client_auth());
                     pipeline.addLast(Constants.SSL_HANDLER, new SslHandler(engine));
                 }
-
                 if (flushConsolidationSwitch) {
-                    pipeline.addLast("flushConsolidationHandler", new FlushConsolidationHandler(
-                            1024, true));
+                    pipeline.addLast("flushConsolidationHandler", new FlushConsolidationHandler(1024, true));
                 }
                 pipeline.addLast("decoder", codec.newDecoder());
                 pipeline.addLast("encoder", codec.newEncoder());
                 if (idleSwitch) {
-                    pipeline.addLast("idleStateHandler", new IdleStateHandler(0, 0, idleTime,
-                            TimeUnit.MILLISECONDS));
+                    pipeline.addLast("idleStateHandler", new IdleStateHandler(0, 0, idleTime, TimeUnit.MILLISECONDS));
                     pipeline.addLast("serverIdleHandler", serverIdleHandler);
                 }
                 pipeline.addLast("connectionEventHandler", connectionEventHandler);
@@ -431,20 +412,20 @@ public class RpcServer extends AbstractRemotingServer {
     }
 
     /**
-     * @see RemotingServer#registerProcessor(String protocolHeader,String protocolVersion, com.mfma.sofaboltdemo.sofabolt.CommandCode, com.mfma.sofaboltdemo.sofabolt.RemotingProcessor)
+     * @see RemotingServer#registerProcessor(String protocolHeader, String protocolVersion, com.mfma.sofaboltdemo.sofabolt.CommandCode, com.mfma.sofaboltdemo.sofabolt.RemotingProcessor)
      */
     @Override
-    public void registerProcessor(String protocolHeader, String protocolVersion,CommandCode cmd, RemotingProcessor<?> processor) {
-        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolHeader,protocolVersion)).getCommandHandler()
+    public void registerProcessor(String protocolHeader, String protocolVersion, CommandCode cmd, RemotingProcessor<?> processor) {
+        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolHeader, protocolVersion)).getCommandHandler()
                 .registerProcessor(cmd, processor);
     }
 
     /**
-     * @see RemotingServer#registerDefaultExecutor(String protocolHeader,String protocolVersion, ExecutorService)
+     * @see RemotingServer#registerDefaultExecutor(String protocolHeader, String protocolVersion, ExecutorService)
      */
     @Override
-    public void registerDefaultExecutor(String protocolHeader, String protocolVersion,ExecutorService executor) {
-        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolHeader,protocolVersion)).getCommandHandler()
+    public void registerDefaultExecutor(String protocolHeader, String protocolVersion, ExecutorService executor) {
+        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolHeader, protocolVersion)).getCommandHandler()
                 .registerDefaultExecutor(executor);
     }
 
@@ -724,9 +705,7 @@ public class RpcServer extends AbstractRemotingServer {
      * @throws RemotingException    remoting exception remoting exception
      * @throws InterruptedException interrupted exception
      */
-    public RpcResponseFuture invokeWithFuture(final String addr, final Object request,
-                                              final int timeoutMillis) throws RemotingException,
-            InterruptedException {
+    public RpcResponseFuture invokeWithFuture(final String addr, final Object request, final int timeoutMillis) throws RemotingException, InterruptedException {
         ensureStarted();
         check();
         return this.rpcRemoting.invokeWithFuture(addr, request, null, timeoutMillis);
@@ -743,10 +722,7 @@ public class RpcServer extends AbstractRemotingServer {
      * @throws RemotingException    remoting exception remoting exception
      * @throws InterruptedException interrupted exception
      */
-    public RpcResponseFuture invokeWithFuture(final String addr, final Object request,
-                                              final InvokeContext invokeContext,
-                                              final int timeoutMillis) throws RemotingException,
-            InterruptedException {
+    public RpcResponseFuture invokeWithFuture(final String addr, final Object request, final InvokeContext invokeContext, final int timeoutMillis) throws RemotingException, InterruptedException {
         ensureStarted();
         check();
         return this.rpcRemoting.invokeWithFuture(addr, request, invokeContext, timeoutMillis);
@@ -769,9 +745,7 @@ public class RpcServer extends AbstractRemotingServer {
      * @throws RemotingException    remoting exception remoting exception
      * @throws InterruptedException interrupted exception
      */
-    public RpcResponseFuture invokeWithFuture(final Url url, final Object request,
-                                              final int timeoutMillis) throws RemotingException,
-            InterruptedException {
+    public RpcResponseFuture invokeWithFuture(final Url url, final Object request, final int timeoutMillis) throws RemotingException, InterruptedException {
         ensureStarted();
         check();
         return this.rpcRemoting.invokeWithFuture(url, request, null, timeoutMillis);
@@ -788,10 +762,7 @@ public class RpcServer extends AbstractRemotingServer {
      * @throws RemotingException    remoting exception remoting exception
      * @throws InterruptedException interrupted exception
      */
-    public RpcResponseFuture invokeWithFuture(final Url url, final Object request,
-                                              final InvokeContext invokeContext,
-                                              final int timeoutMillis) throws RemotingException,
-            InterruptedException {
+    public RpcResponseFuture invokeWithFuture(final Url url, final Object request, final InvokeContext invokeContext, final int timeoutMillis) throws RemotingException, InterruptedException {
         ensureStarted();
         check();
         return this.rpcRemoting.invokeWithFuture(url, request, invokeContext, timeoutMillis);

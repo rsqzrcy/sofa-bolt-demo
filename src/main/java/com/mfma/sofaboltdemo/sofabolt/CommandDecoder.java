@@ -16,10 +16,10 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+
+import java.util.List;
 
 /**
  * Decode command.
@@ -34,7 +34,8 @@ public interface CommandDecoder {
      * @param ctx
      * @param in
      * @param out
+     * @param protocolCode
      * @throws Exception
      */
-    void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception;
+    void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, ProtocolCode protocolCode) throws Exception;
 }

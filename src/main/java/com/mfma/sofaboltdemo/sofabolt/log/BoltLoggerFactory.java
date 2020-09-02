@@ -16,12 +16,11 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.log;
 
-import java.io.File;
-
+import com.alipay.sofa.common.log.LoggerSpaceManager;
+import com.mfma.sofaboltdemo.sofabolt.util.StringUtils;
 import org.slf4j.Logger;
 
-import com.mfma.sofaboltdemo.sofabolt.util.StringUtils;
-import com.alipay.sofa.common.log.LoggerSpaceManager;
+import java.io.File;
 
 /**
  * Customized logger factory

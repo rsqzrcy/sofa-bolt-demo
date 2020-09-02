@@ -16,12 +16,12 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc.protocol;
 
-import java.util.concurrent.Executor;
-
 import com.mfma.sofaboltdemo.sofabolt.AsyncContext;
 import com.mfma.sofaboltdemo.sofabolt.BizContext;
 import com.mfma.sofaboltdemo.sofabolt.LifeCycle;
 import com.mfma.sofaboltdemo.sofabolt.RemotingContext;
+
+import java.util.concurrent.Executor;
 
 /**
  * Defined all functions for biz to process user defined request.

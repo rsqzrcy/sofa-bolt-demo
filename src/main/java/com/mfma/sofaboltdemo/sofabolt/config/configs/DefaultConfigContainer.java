@@ -16,12 +16,11 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.config.configs;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import org.slf4j.Logger;
 
-import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * default implementation for config container

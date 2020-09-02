@@ -19,7 +19,6 @@ package com.mfma.sofaboltdemo.sofabolt.rpc;
 import com.mfma.sofaboltdemo.sofabolt.Connection;
 import com.mfma.sofaboltdemo.sofabolt.ConnectionEventHandler;
 import com.mfma.sofaboltdemo.sofabolt.config.switches.GlobalSwitch;
-
 import io.netty.channel.ChannelHandlerContext;
 
 /**

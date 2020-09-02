@@ -16,15 +16,14 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
+import com.mfma.sofaboltdemo.sofabolt.config.Configs;
+import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
+import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocol;
+import org.slf4j.Logger;
+
 import java.lang.ref.SoftReference;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
-import org.slf4j.Logger;
-
-import com.mfma.sofaboltdemo.sofabolt.config.Configs;
-import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocolV2;
 
 /**
  * URL definition.
@@ -52,7 +51,7 @@ public class Url {
     private String       protocol;
 
     /** URL args: version */
-    private String       version = RpcProtocolV2.PROTOCOL_CODE;
+    private String       version = RpcProtocol.PROTOCOL_HEADER;
 
     /** URL agrs: connection number */
     private int        connNum = Configs.DEFAULT_CONN_NUM_PER_URL;

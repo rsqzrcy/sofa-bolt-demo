@@ -16,18 +16,16 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.exception.RemotingException;
 import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import com.mfma.sofaboltdemo.sofabolt.util.RemotingUtil;
-
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.util.Timeout;
 import io.netty.util.TimerTask;
+import org.slf4j.Logger;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Base remoting capability.

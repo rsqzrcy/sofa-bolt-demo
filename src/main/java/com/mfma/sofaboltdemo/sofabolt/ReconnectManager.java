@@ -16,13 +16,12 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
+import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
+import org.slf4j.Logger;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import org.slf4j.Logger;
-
-import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 
 /**
  * Reconnect manager.

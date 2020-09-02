@@ -16,12 +16,11 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.util.concurrent.ExecutorService;
-
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import com.mfma.sofaboltdemo.sofabolt.util.RemotingUtil;
+import org.slf4j.Logger;
+
+import java.util.concurrent.ExecutorService;
 
 /**
  * Processor to process remoting command.

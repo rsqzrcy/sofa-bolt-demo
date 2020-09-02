@@ -284,14 +284,13 @@ public class NettyUtils {
      * 检验校验和是否正确
      *
      * @param toBeCheckedArray: 待校验数据的源数据
-     * @param checkSumArray:    校验和
+     * @param checkSum:    校验和
      * @return
      */
-    public static boolean checkSum(byte[] toBeCheckedArray, byte[] checkSumArray) {
+    public static boolean checkSum(byte[] toBeCheckedArray, String  checkSum) {
         byte[] bytes = getSumCheck(toBeCheckedArray);
         String data0 = ByteBufUtil.hexDump(bytes);
-        String data1 = ByteBufUtil.hexDump(checkSumArray);
-        return data0.equalsIgnoreCase(data1);
+        return data0.equalsIgnoreCase(checkSum);
     }
 
 
@@ -314,7 +313,7 @@ public class NettyUtils {
         //位数和转化为Byte数组
         //注意按照协议校验和按照低字节在前高字节在后来组织填充到协议格式中
         for (int i = 0; i < 2; i++) {
-            bytes[2 + i - 2] = (byte) (sum >> (i * 8) & 0xFF);
+            bytes[i] = (byte) (sum >> (i * 8) & 0xFF);
         }
         return bytes;
     }

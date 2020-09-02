@@ -17,8 +17,6 @@
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
 import com.mfma.sofaboltdemo.sofabolt.*;
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.config.switches.ProtocolSwitch;
 import com.mfma.sofaboltdemo.sofabolt.exception.CodecException;
 import com.mfma.sofaboltdemo.sofabolt.exception.RemotingException;
@@ -27,6 +25,7 @@ import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocolManager;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcRequestCommand;
 import com.mfma.sofaboltdemo.sofabolt.util.RemotingUtil;
+import org.slf4j.Logger;
 
 /**
  * Rpc remoting capability.

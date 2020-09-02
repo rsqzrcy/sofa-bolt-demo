@@ -16,9 +16,8 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.util;
 
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.InvokeContext;
+import org.slf4j.Logger;
 
 /** 
  * Trace log util

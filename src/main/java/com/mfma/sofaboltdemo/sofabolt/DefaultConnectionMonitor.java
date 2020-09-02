@@ -16,16 +16,15 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
+import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
+import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
+import com.mfma.sofaboltdemo.sofabolt.util.RunStateRecordedFutureTask;
+import org.slf4j.Logger;
+
 import java.util.Map;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-
-import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
-import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
-import com.mfma.sofaboltdemo.sofabolt.util.RunStateRecordedFutureTask;
 
 /**
  *  A default connection monitor that handle connections with strategies

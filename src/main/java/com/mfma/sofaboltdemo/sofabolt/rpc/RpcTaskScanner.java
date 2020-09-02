@@ -16,19 +16,18 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
+import com.mfma.sofaboltdemo.sofabolt.AbstractLifeCycle;
+import com.mfma.sofaboltdemo.sofabolt.LifeCycleException;
+import com.mfma.sofaboltdemo.sofabolt.NamedThreadFactory;
+import com.mfma.sofaboltdemo.sofabolt.Scannable;
+import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
+import org.slf4j.Logger;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import com.mfma.sofaboltdemo.sofabolt.AbstractLifeCycle;
-import com.mfma.sofaboltdemo.sofabolt.LifeCycleException;
-import org.slf4j.Logger;
-
-import com.mfma.sofaboltdemo.sofabolt.NamedThreadFactory;
-import com.mfma.sofaboltdemo.sofabolt.Scannable;
-import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 
 /**
  * Scanner is used to do scan task.

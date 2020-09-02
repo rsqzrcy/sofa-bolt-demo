@@ -16,14 +16,14 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
-import java.net.InetSocketAddress;
-
 import com.mfma.sofaboltdemo.sofabolt.CommandFactory;
 import com.mfma.sofaboltdemo.sofabolt.RemotingCommand;
 import com.mfma.sofaboltdemo.sofabolt.ResponseStatus;
 import com.mfma.sofaboltdemo.sofabolt.rpc.exception.RpcServerException;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcRequestCommand;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcResponseCommand;
+
+import java.net.InetSocketAddress;
 
 /**
  * command factory for rpc protocol

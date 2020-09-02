@@ -16,15 +16,14 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
-import java.lang.ref.SoftReference;
-import java.util.Properties;
-
 import com.mfma.sofaboltdemo.sofabolt.RemotingAddressParser;
 import com.mfma.sofaboltdemo.sofabolt.Url;
 import com.mfma.sofaboltdemo.sofabolt.config.Configs;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocol;
-import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocolV2;
 import com.mfma.sofaboltdemo.sofabolt.util.StringUtils;
+
+import java.lang.ref.SoftReference;
+import java.util.Properties;
 
 /**
  * This is address parser for RPC.
@@ -216,7 +215,7 @@ public class RpcAddressParser implements RemotingAddressParser {
         url.setConnectTimeout(connTimeout);
 
         String protocolStr = url.getProperty(RpcConfigs.URL_PROTOCOL);
-        String protocol = RpcProtocolV2.PROTOCOL_CODE;
+        String protocol = RpcProtocol.PROTOCOL_HEADER;
         if (StringUtils.isNotBlank(protocolStr)) {
             if (StringUtils.isNumeric(protocolStr)) {
                 protocol = protocolStr;
@@ -230,7 +229,7 @@ public class RpcAddressParser implements RemotingAddressParser {
         url.setProtocol(protocol);
 
         String versionStr = url.getProperty(RpcConfigs.URL_VERSION);
-        String version = RpcProtocolV2.PROTOCOL_VERSION;
+        String version = RpcProtocol.PROTOCOL_VERSION;
         if (StringUtils.isNotBlank(versionStr)) {
             if (StringUtils.isNumeric(versionStr)) {
                 version = versionStr;

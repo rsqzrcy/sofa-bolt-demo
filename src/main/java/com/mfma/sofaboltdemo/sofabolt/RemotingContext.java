@@ -16,15 +16,14 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.mfma.sofaboltdemo.sofabolt.rpc.RpcCommandType;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.UserProcessor;
 import com.mfma.sofaboltdemo.sofabolt.util.ConnectionUtil;
 import com.mfma.sofaboltdemo.sofabolt.util.StringUtils;
-
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Wrap the ChannelHandlerContext.

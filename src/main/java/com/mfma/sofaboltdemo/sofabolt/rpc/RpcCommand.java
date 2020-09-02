@@ -27,7 +27,6 @@ import com.mfma.sofaboltdemo.sofabolt.exception.DeserializationException;
 import com.mfma.sofaboltdemo.sofabolt.exception.SerializationException;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcDeserializeLevel;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocol;
-import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocolV2;
 
 /**
  * Remoting command. <br>
@@ -194,7 +193,7 @@ public abstract class RpcCommand implements RemotingCommand {
 
     @Override
     public ProtocolCode getProtocolCode() {
-        return ProtocolCode.fromBytes(RpcProtocolV2.PROTOCOL_CODE,RpcProtocolV2.PROTOCOL_VERSION);
+        return ProtocolCode.fromBytes(RpcProtocol.PROTOCOL_HEADER, RpcProtocol.PROTOCOL_VERSION);
     }
 
     @Override

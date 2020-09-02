@@ -16,32 +16,19 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import com.mfma.sofaboltdemo.sofabolt.constant.Constants;
-import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
-import org.slf4j.Logger;
-
 import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
 import com.mfma.sofaboltdemo.sofabolt.config.switches.GlobalSwitch;
 import com.mfma.sofaboltdemo.sofabolt.connection.ConnectionFactory;
+import com.mfma.sofaboltdemo.sofabolt.constant.Constants;
 import com.mfma.sofaboltdemo.sofabolt.exception.RemotingException;
+import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
 import com.mfma.sofaboltdemo.sofabolt.util.FutureTaskUtil;
 import com.mfma.sofaboltdemo.sofabolt.util.RunStateRecordedFutureTask;
 import com.mfma.sofaboltdemo.sofabolt.util.StringUtils;
+import org.slf4j.Logger;
+
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * Abstract implementation of connection manager
