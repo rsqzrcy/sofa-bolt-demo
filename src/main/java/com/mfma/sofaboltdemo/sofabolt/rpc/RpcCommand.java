@@ -16,6 +16,7 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mfma.sofaboltdemo.sofabolt.CommandCode;
 import com.mfma.sofaboltdemo.sofabolt.InvokeContext;
 import com.mfma.sofaboltdemo.sofabolt.ProtocolCode;
@@ -193,7 +194,10 @@ public abstract class RpcCommand implements RemotingCommand {
 
     @Override
     public ProtocolCode getProtocolCode() {
-        return ProtocolCode.fromBytes(RpcProtocol.PROTOCOL_HEADER, RpcProtocol.PROTOCOL_VERSION);
+        JSONObject protocolCode = new JSONObject()
+                .fluentPut("protocolHeader",RpcProtocol.PROTOCOL_HEADER)
+                .fluentPut("protocolVersion", RpcProtocol.PROTOCOL_VERSION);
+        return ProtocolCode.fromBytes(protocolCode);
     }
 
     @Override

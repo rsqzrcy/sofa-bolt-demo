@@ -55,9 +55,7 @@ public class DefaultInvokeFuture implements InvokeFuture {
 
     private ClassLoader classLoader;
 
-    private String protocol;
-
-    private String version;
+    private ProtocolCode protocolCode;
 
     private InvokeContext invokeContext;
 
@@ -69,17 +67,16 @@ public class DefaultInvokeFuture implements InvokeFuture {
      * @param invokeId         invoke id
      * @param callbackListener callback listener
      * @param callback         callback
-     * @param protocol         protocol code
+     * @param protocolCode     protocol code
      * @param commandFactory   command factory
      */
     public DefaultInvokeFuture(int invokeId, InvokeCallbackListener callbackListener,
-                               InvokeCallback callback, String protocol,String version, CommandFactory commandFactory) {
+                               InvokeCallback callback, ProtocolCode protocolCode, CommandFactory commandFactory) {
         this.invokeId = invokeId;
         this.callbackListener = callbackListener;
         this.callback = callback;
         this.classLoader = Thread.currentThread().getContextClassLoader();
-        this.protocol = protocol;
-        this.version =version;
+        this.protocolCode = protocolCode;
         this.commandFactory = commandFactory;
     }
 
@@ -89,14 +86,14 @@ public class DefaultInvokeFuture implements InvokeFuture {
      * @param invokeId         invoke id
      * @param callbackListener callback listener
      * @param callback         callback
-     * @param protocol         protocol
+     * @param protocolCode     protocolCode
      * @param commandFactory   command factory
      * @param invokeContext    invoke context
      */
     public DefaultInvokeFuture(int invokeId, InvokeCallbackListener callbackListener,
-                               InvokeCallback callback, String protocol,String version,
+                               InvokeCallback callback, ProtocolCode protocolCode,
                                CommandFactory commandFactory, InvokeContext invokeContext) {
-        this(invokeId, callbackListener, callback, protocol, version,commandFactory);
+        this(invokeId, callbackListener, callback, protocolCode, commandFactory);
         this.invokeContext = invokeContext;
     }
 
@@ -202,8 +199,8 @@ public class DefaultInvokeFuture implements InvokeFuture {
      * @see com.mfma.sofaboltdemo.sofabolt.InvokeFuture#getProtocolCode()
      */
     @Override
-    public String getProtocolCode() {
-        return this.protocol;
+    public ProtocolCode getProtocolCode() {
+        return this.protocolCode;
     }
 
     /**
@@ -228,7 +225,7 @@ public class DefaultInvokeFuture implements InvokeFuture {
     @Override
     public void tryAsyncExecuteInvokeCallbackAbnormally() {
         try {
-            Protocol protocol = ProtocolManager.getProtocol(ProtocolCode.fromBytes(this.protocol,this.version));
+            Protocol protocol = ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolCode.getCode()));
             if (null != protocol) {
                 CommandHandler commandHandler = protocol.getCommandHandler();
                 if (null != commandHandler) {
@@ -257,10 +254,10 @@ public class DefaultInvokeFuture implements InvokeFuture {
                     }
                 } else {
                     logger.error("Executor null in commandHandler of protocolCode [{}].",
-                            this.protocol);
+                            this.protocolCode.toString());
                 }
             } else {
-                logger.error("protocolCode [{}] not registered!", this.protocol);
+                logger.error("protocolCode [{}] not registered!", this.protocolCode.toString());
             }
         } catch (Exception e) {
             logger.error("Exception caught when executing invoke callback abnormally.", e);

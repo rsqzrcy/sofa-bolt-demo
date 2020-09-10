@@ -16,6 +16,7 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mfma.sofaboltdemo.sofabolt.config.Configurable;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.UserProcessor;
 
@@ -64,22 +65,20 @@ public interface RemotingServer extends Configurable, LifeCycle {
     /**
      * Register processor for command with the command code.
      *
-     * @param protocolHeader  protocol header
-     * @param protocolVersion protocol version
+     * @param protocolCode    protocol code
      * @param commandCode     command code
      * @param processor       processor
      */
-    void registerProcessor(String protocolHeader, String protocolVersion, CommandCode commandCode,
+    void registerProcessor(JSONObject protocolCode, CommandCode commandCode,
                            RemotingProcessor<?> processor);
 
     /**
      * Register default executor service for server.
      *
-     * @param protocolHeader  protocol header
-     * @param protocolVersion protocol version
+     * @param protocolCode    protocol code
      * @param executor        the executor service for the protocol code
      */
-    void registerDefaultExecutor(String protocolHeader, String protocolVersion, ExecutorService executor);
+    void registerDefaultExecutor(JSONObject protocolCode, ExecutorService executor);
 
     /**
      * Register user processor.

@@ -16,70 +16,52 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
+import com.alibaba.fastjson.JSONObject;
+
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Protocol code definition, you can define your own protocol code in byte array {@link ProtocolCode#version}
+ * Protocol code definition, you can define your own protocol code in byte array {@link ProtocolCode#code}
  * We suggest to use just one byte for simplicity.
  *
  * @author tsui
  * @version $Id: ProtocolCode.java, v 0.1 2018-03-27 17:23 tsui Exp $
  */
 public class ProtocolCode {
+    /** bytes to represent protocol code */
+    private JSONObject code;
 
-    String header;
-
-    /**
-     * bytes to represent protocol code
-     */
-    String version;
-
-    public ProtocolCode(String header, String version) {
-        this.header = header;
-        this.version = version;
+    private ProtocolCode(JSONObject code) {
+        this.code = code;
     }
 
-    public static ProtocolCode fromBytes(String protocolCode,String protocolVersion) {
-        return new ProtocolCode(protocolCode, protocolVersion);
+    public static ProtocolCode fromBytes(JSONObject code) {
+        return new ProtocolCode(code);
     }
 
-    public String getHeader() {
-        return header;
-    }
 
-    public void setHeader(String header) {
-        this.header = header;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
+    public JSONObject getCode() {
+        return code;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        } ;
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         ProtocolCode that = (ProtocolCode) o;
-        return Objects.equals(header, that.header) &&
-                Objects.equals(version, that.version);
+        return getCode().equals(that.getCode());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(header, version);
+        return Objects.hash(getCode());
     }
 
     @Override
     public String toString() {
-        return "ProtocolCode{"+header +","+ version+"}";
+        return "ProtocolCode{" +
+                "code=" + code.toString() +
+                '}';
     }
-
 }

@@ -36,22 +36,20 @@ import java.util.concurrent.*;
  * @author xiaomin.cxm
  * @version $Id: DefaultConnectionManager.java, v 0.1 Mar 8, 2016 10:43:51 AM xiaomin.cxm Exp $
  */
-public class DefaultConnectionManager extends AbstractLifeCycle implements ConnectionManager,
-                                                               ConnectionHeartbeatManager,
-                                                               Scannable, LifeCycle {
+public class DefaultConnectionManager extends AbstractLifeCycle implements ConnectionManager, ConnectionHeartbeatManager, Scannable, LifeCycle {
 
-    private static final Logger                                                     logger = BoltLoggerFactory
-                                                                                               .getLogger("CommonDefault");
+    private static final Logger logger = BoltLoggerFactory
+            .getLogger("CommonDefault");
 
     /**
      * executor to create connections in async way
      */
-    private ThreadPoolExecutor                                                      asyncCreateConnectionExecutor;
+    private ThreadPoolExecutor asyncCreateConnectionExecutor;
 
     /**
      * switch status
      */
-    private GlobalSwitch                                                            globalSwitch;
+    private GlobalSwitch globalSwitch;
 
     /**
      * connection pool initialize tasks
@@ -61,32 +59,32 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
     /**
      * heal connection tasks
      */
-    protected ConcurrentHashMap<String, FutureTask<Integer>>                        healTasks;
+    protected ConcurrentHashMap<String, FutureTask<Integer>> healTasks;
 
     /**
      * connection pool select strategy
      */
-    protected ConnectionSelectStrategy                                              connectionSelectStrategy;
+    protected ConnectionSelectStrategy connectionSelectStrategy;
 
     /**
      * address parser
      */
-    protected RemotingAddressParser                                                 addressParser;
+    protected RemotingAddressParser addressParser;
 
     /**
      * connection factory
      */
-    protected ConnectionFactory                                                     connectionFactory;
+    protected ConnectionFactory connectionFactory;
 
     /**
      * connection event handler
      */
-    protected ConnectionEventHandler                                                connectionEventHandler;
+    protected ConnectionEventHandler connectionEventHandler;
 
     /**
      * connection event listener
      */
-    protected ConnectionEventListener                                               connectionEventListener;
+    protected ConnectionEventListener connectionEventListener;
 
     /**
      * Default constructor.
@@ -112,7 +110,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
      * Construct with parameters.
      *
      * @param connectionSelectStrategy connection selection strategy
-     * @param connectionFactory connection factory
+     * @param connectionFactory        connection factory
      */
     public DefaultConnectionManager(ConnectionSelectStrategy connectionSelectStrategy,
                                     ConnectionFactory connectionFactory) {
@@ -122,8 +120,9 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
 
     /**
      * Construct with parameters.
-     * @param connectionFactory connection selection strategy
-     * @param addressParser address parser
+     *
+     * @param connectionFactory      connection selection strategy
+     * @param addressParser          address parser
      * @param connectionEventHandler connection event handler
      */
     public DefaultConnectionManager(ConnectionFactory connectionFactory,
@@ -138,9 +137,9 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
      * Construct with parameters.
      *
      * @param connectionSelectStrategy connection selection strategy
-     * @param connectionFactory connection factory
-     * @param connectionEventHandler connection event handler
-     * @param connectionEventListener connection event listener
+     * @param connectionFactory        connection factory
+     * @param connectionEventHandler   connection event handler
+     * @param connectionEventListener  connection event listener
      */
     public DefaultConnectionManager(ConnectionSelectStrategy connectionSelectStrategy,
                                     ConnectionFactory connectionFactory,
@@ -155,10 +154,10 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
      * Construct with parameters.
      *
      * @param connectionSelectStrategy connection selection strategy.
-     * @param connectionFactory connection factory
-     * @param connectionEventHandler connection event handler
-     * @param connectionEventListener connection event listener
-     * @param globalSwitch global switch
+     * @param connectionFactory        connection factory
+     * @param connectionEventHandler   connection event handler
+     * @param connectionEventListener  connection event listener
+     * @param globalSwitch             global switch
      */
     public DefaultConnectionManager(ConnectionSelectStrategy connectionSelectStrategy,
                                     ConnectionFactory connectionFactory,
@@ -166,7 +165,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                                     ConnectionEventListener connectionEventListener,
                                     GlobalSwitch globalSwitch) {
         this(connectionSelectStrategy, connectionFactory, connectionEventHandler,
-            connectionEventListener);
+                connectionEventListener);
         this.globalSwitch = globalSwitch;
     }
 
@@ -179,8 +178,8 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
         int minPoolSize = ConfigManager.conn_create_tp_min_size();
         int maxPoolSize = ConfigManager.conn_create_tp_max_size();
         this.asyncCreateConnectionExecutor = new ThreadPoolExecutor(minPoolSize, maxPoolSize,
-            keepAliveTime, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(queueSize),
-            new NamedThreadFactory("Bolt-conn-warmup-executor", true));
+                keepAliveTime, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(queueSize),
+                new NamedThreadFactory("Bolt-conn-warmup-executor", true));
     }
 
     @Override
@@ -234,8 +233,8 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
         } catch (Exception e) {
             // should not reach here.
             logger.error(
-                "[NOTIFYME] Exception occurred when getOrCreateIfAbsent an empty ConnectionPool!",
-                e);
+                    "[NOTIFYME] Exception occurred when getOrCreateIfAbsent an empty ConnectionPool!",
+                    e);
         }
         if (pool != null) {
             pool.add(connection);
@@ -272,7 +271,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
     public Map<String, List<Connection>> getAll() {
         Map<String, List<Connection>> allConnections = new HashMap<String, List<Connection>>();
         for (Map.Entry<String, RunStateRecordedFutureTask<ConnectionPool>> entry : this
-            .getConnPools().entrySet()) {
+                .getConnPools().entrySet()) {
             ConnectionPool pool = FutureTaskUtil.getFutureTaskResult(entry.getValue(), logger);
             if (null != pool) {
                 allConnections.put(entry.getKey(), pool.getAll());
@@ -317,13 +316,13 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
             if (pool.isEmpty()) {
                 this.removeTask(poolKey);
                 logger.warn(
-                    "Remove and close the last connection in ConnectionPool with poolKey {}",
-                    poolKey);
+                        "Remove and close the last connection in ConnectionPool with poolKey {}",
+                        poolKey);
             } else {
                 logger
-                    .warn(
-                        "Remove and close a connection in ConnectionPool with poolKey {}, {} connections left.",
-                        poolKey, pool.size());
+                        .warn(
+                                "Remove and close a connection in ConnectionPool with poolKey {}, {} connections left.",
+                                poolKey, pool.size());
             }
         }
     }
@@ -343,7 +342,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
             if (null != pool) {
                 pool.removeAllAndTryClose();
                 logger.warn("Remove and close all connections in ConnectionPool of poolKey={}",
-                    poolKey);
+                        poolKey);
             }
         }
     }
@@ -377,12 +376,12 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
         if (connection.getChannel() == null || !connection.getChannel().isActive()) {
             this.remove(connection);
             throw new RemotingException("Check connection failed for address: "
-                                        + connection.getUrl());
+                    + connection.getUrl());
         }
         if (!connection.getChannel().isWritable()) {
             // No remove. Most of the time it is unwritable temporarily.
             throw new RemotingException("Check connection failed for address: "
-                                        + connection.getUrl() + ", maybe write overflow!");
+                    + connection.getUrl() + ", maybe write overflow!");
         }
     }
 
@@ -414,13 +413,13 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                 RunStateRecordedFutureTask<ConnectionPool> task = this.connTasks.get(poolKey);
                 if (task == null) {
                     logger.info("task(poolKey={}) is null, do not scan the connection pool",
-                        poolKey);
+                            poolKey);
                     continue;
                 }
 
                 if (!task.isDone()) {
                     logger.info("task(poolKey={}) is not done, do not scan the connection pool",
-                        poolKey);
+                            poolKey);
                     continue;
                 }
 
@@ -431,7 +430,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                         if ((System.currentTimeMillis() - pool.getLastAccessTimestamp()) > Constants.DEFAULT_EXPIRE_TIME) {
                             iter.remove();
                             logger.warn("Remove expired pool task of poolKey {} which is empty.",
-                                poolKey);
+                                    poolKey);
                         }
                     }
                 }
@@ -448,7 +447,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
     public Connection getAndCreateIfAbsent(Url url) throws InterruptedException, RemotingException {
         // get and create a connection pool with initialized connections.
         ConnectionPool pool = this.getConnectionPoolAndCreateIfAbsent(url.getUniqueKey(),
-            new ConnectionPoolCall(url));
+                new ConnectionPoolCall(url));
         if (null != pool) {
             return pool.get();
         } else {
@@ -462,7 +461,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
      */
     @Override
     public void createConnectionInManagement(Url url) throws RemotingException,
-                                                     InterruptedException {
+            InterruptedException {
         this.getConnectionPoolAndCreateIfAbsent(url.getUniqueKey(), new ConnectionPoolCall(url, 0));
     }
 
@@ -476,10 +475,10 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
      */
     @Override
     public void createConnectionAndHealIfNeed(Url url) throws InterruptedException,
-                                                      RemotingException {
+            RemotingException {
         // get and create a connection pool with initialized connections.
         ConnectionPool pool = this.getConnectionPoolAndCreateIfAbsent(url.getUniqueKey(),
-            new ConnectionPoolCall(url));
+                new ConnectionPoolCall(url));
         if (null != pool) {
             healIfNeed(pool, url);
         } else {
@@ -497,7 +496,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
             conn = this.connectionFactory.createConnection(url);
         } catch (Exception e) {
             throw new RemotingException("Create connection failed. The address is "
-                                        + url.getOriginUrl(), e);
+                    + url.getOriginUrl(), e);
         }
         return conn;
     }
@@ -510,8 +509,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
         try {
             return this.connectionFactory.createConnection(ip, port, connectTimeout);
         } catch (Exception e) {
-            throw new RemotingException("Create connection failed. The address is " + ip + ":"
-                                        + port, e);
+            throw new RemotingException("Create connection failed. The address is " + ip + ":" + port, e);
         }
     }
 
@@ -563,13 +561,13 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
      * @param poolKey  mapping key of {@link ConnectionPool}
      * @param callable the callable task
      * @return a non-nullable instance of {@link ConnectionPool}
-     * @throws RemotingException if there is no way to get an available {@link ConnectionPool}
+     * @throws RemotingException    if there is no way to get an available {@link ConnectionPool}
      * @throws InterruptedException
      */
     private ConnectionPool getConnectionPoolAndCreateIfAbsent(String poolKey,
                                                               Callable<ConnectionPool> callable)
-                                                                                                throws RemotingException,
-                                                                                                InterruptedException {
+            throws RemotingException,
+            InterruptedException {
         RunStateRecordedFutureTask<ConnectionPool> initialTask;
         ConnectionPool pool = null;
 
@@ -582,7 +580,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
             initialTask = this.connTasks.get(poolKey);
             if (null == initialTask) {
                 RunStateRecordedFutureTask<ConnectionPool> newTask = new RunStateRecordedFutureTask<ConnectionPool>(
-                    callable);
+                        callable);
                 initialTask = this.connTasks.putIfAbsent(poolKey, newTask);
                 if (null == initialTask) {
                     initialTask = newTask;
@@ -599,7 +597,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                     }
                     this.connTasks.remove(poolKey);
                     String errMsg = "Get future task result null for poolKey [" + poolKey
-                                    + "] after [" + (timesOfResultNull + 1) + "] times try.";
+                            + "] after [" + (timesOfResultNull + 1) + "] times try.";
                     throw new RemotingException(errMsg);
                 }
             } catch (InterruptedException e) {
@@ -609,9 +607,9 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                 }
                 this.connTasks.remove(poolKey);
                 logger
-                    .warn(
-                        "Future task of poolKey {} interrupted {} times. InterruptedException thrown and stop retry.",
-                        poolKey, (timesOfInterrupt + 1), e);
+                        .warn(
+                                "Future task of poolKey {} interrupted {} times. InterruptedException thrown and stop retry.",
+                                poolKey, (timesOfInterrupt + 1), e);
                 throw e;
             } catch (ExecutionException e) {
                 // DO NOT retry if ExecutionException occurred
@@ -647,10 +645,10 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
      * execute heal connection tasks if the actual number of connections in pool is less than expected
      *
      * @param pool connection pool
-     * @param url target url
+     * @param url  target url
      */
     private void healIfNeed(ConnectionPool pool, Url url) throws RemotingException,
-                                                         InterruptedException {
+            InterruptedException {
         String poolKey = url.getUniqueKey();
         // only when async creating connections done
         // and the actual size of connections less than expected, the healing task can be run.
@@ -658,7 +656,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
             FutureTask<Integer> task = this.healTasks.get(poolKey);
             if (null == task) {
                 FutureTask<Integer> newTask = new FutureTask<Integer>(new HealConnectionCall(url,
-                    pool));
+                        pool));
                 task = this.healTasks.putIfAbsent(poolKey, newTask);
                 if (null == task) {
                     task = newTask;
@@ -669,7 +667,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                 int numAfterHeal = task.get();
                 if (logger.isDebugEnabled()) {
                     logger.debug("[NOTIFYME] - conn num after heal {}, expected {}, warmup {}",
-                        numAfterHeal, url.getConnNum(), url.isConnWarmup());
+                            numAfterHeal, url.getConnNum(), url.isConnWarmup());
                 }
             } catch (InterruptedException e) {
                 this.healTasks.remove(poolKey);
@@ -696,8 +694,8 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
      */
     private class ConnectionPoolCall implements Callable<ConnectionPool> {
         private boolean whetherInitConnection;
-        private Url     url;
-        private int     syncCreateNumWhenNotWarmup;
+        private Url url;
+        private int syncCreateNumWhenNotWarmup;
 
         /**
          * create a {@link ConnectionPool} but not init connections
@@ -729,7 +727,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
             if (whetherInitConnection) {
                 try {
                     doCreate(this.url, pool, this.getClass().getSimpleName(),
-                        syncCreateNumWhenNotWarmup);
+                            syncCreateNumWhenNotWarmup);
                 } catch (Exception e) {
                     pool.removeAllAndTryClose();
                     throw e;
@@ -747,7 +745,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
      * @version $Id: HealConnectionCall.java, v 0.1 Jul 20, 2017 10:23:23 AM xiaomin.cxm Exp $
      */
     private class HealConnectionCall implements Callable<Integer> {
-        private Url            url;
+        private Url url;
         private ConnectionPool pool;
 
         /**
@@ -770,9 +768,9 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
     /**
      * do create connections
      *
-     * @param url target url
-     * @param pool connection pool
-     * @param taskName task name
+     * @param url                        target url
+     * @param pool                       connection pool
+     * @param taskName                   task name
      * @param syncCreateNumWhenNotWarmup you can specify this param to ensure at least desired number of connections available in sync way
      * @throws RemotingException
      */
@@ -785,7 +783,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
         }
         if (logger.isDebugEnabled()) {
             logger.debug("actual num {}, expect num {}, task name {}", actualNum, expectNum,
-                taskName);
+                    taskName);
         }
         if (url.isConnWarmup()) {
             for (int i = actualNum; i < expectNum; ++i) {
@@ -795,7 +793,7 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
         } else {
             if (syncCreateNumWhenNotWarmup < 0 || syncCreateNumWhenNotWarmup > url.getConnNum()) {
                 throw new IllegalArgumentException(
-                    "sync create number when not warmup should be [0," + url.getConnNum() + "]");
+                        "sync create number when not warmup should be [0," + url.getConnNum() + "]");
             }
             // create connection in sync way
             if (syncCreateNumWhenNotWarmup > 0) {
@@ -820,9 +818,9 @@ public class DefaultConnectionManager extends AbstractLifeCycle implements Conne
                                     pool.add(conn);
                                 } catch (RemotingException e) {
                                     logger
-                                        .error(
-                                            "Exception occurred in async create connection thread for {}, taskName {}",
-                                            url.getUniqueKey(), taskName, e);
+                                            .error(
+                                                    "Exception occurred in async create connection thread for {}, taskName {}",
+                                                    url.getUniqueKey(), taskName, e);
                                     if (pool.isEmpty()) {
                                         connTasks.remove(url.getUniqueKey());
                                         break;

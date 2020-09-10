@@ -158,7 +158,7 @@ public interface ConnectionManager extends Scannable, LifeCycle {
 
     /**
      * Create a connection using specified ip and port.
-     * 
+     *
      * @param ip connect ip, e.g. 127.0.0.1
      * @param port connect port, e.g. 1111
      * @param connectTimeout an int connect timeout value

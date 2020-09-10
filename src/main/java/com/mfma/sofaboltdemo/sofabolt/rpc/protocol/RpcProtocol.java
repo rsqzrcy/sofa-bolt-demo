@@ -66,7 +66,7 @@ public class RpcProtocol implements Protocol {
     /**
      * 协议头
      */
-    public static final String  PROTOCOL_HEADER       = "fdfc";
+    public static final String  PROTOCOL_HEADER  = "fdfc";
 
     /**
      * 协议版本

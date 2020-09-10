@@ -16,6 +16,7 @@
  */
 package com.mfma.sofaboltdemo.protocol;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mfma.sofaboltdemo.config.Agreement;
 import com.mfma.sofaboltdemo.sofabolt.Connection;
 import com.mfma.sofaboltdemo.sofabolt.Protocol;
@@ -67,7 +68,10 @@ public class ProtocolDecoder extends AbstractBatchDecoder {
         if (in.readableBytes() >= DEFAULT_DATA_LENGTH) {
             String protocolHeader = NettyUtils.getHexString(in, 2);
             String protocolVersion = NettyUtils.getHexString(in, 2);
-            return new ProtocolCode(protocolHeader, protocolVersion);
+            JSONObject protocolCode = new JSONObject()
+                    .fluentPut("protocolHeader", protocolHeader)
+                    .fluentPut("protocolVersion", protocolVersion);
+            return ProtocolCode.fromBytes(protocolCode);
         }
         return null;
     }

@@ -16,6 +16,8 @@
  */
 package com.mfma.sofaboltdemo.sofabolt;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -33,23 +35,14 @@ public class ProtocolManager {
         return protocols.get(protocolCode);
     }
 
-    public static void registerProtocol(Protocol protocol, String protocolHeader,String protocolVersion) {
-        registerProtocol(protocol, ProtocolCode.fromBytes(protocolHeader,protocolVersion));
+
+    public static void registerProtocol(ConcurrentMap<ProtocolCode, Protocol> protocolsMap) {
+        ProtocolManager.protocols.putAll(protocolsMap);
     }
 
-    public static void registerProtocol(Protocol protocol, ProtocolCode protocolCode) {
-        if (null == protocolCode || null == protocol) {
-            throw new RuntimeException("Protocol: " + protocol + " and protocol code:"
-                                       + protocolCode + " should not be null!");
-        }
-        Protocol exists = ProtocolManager.protocols.putIfAbsent(protocolCode, protocol);
-        if (exists != null) {
-            throw new RuntimeException("Protocol for code: " + protocolCode + " already exists!");
-        }
-    }
 
-    public static Protocol unRegisterProtocol(String protocolHeader,String protocolVersion) {
-        return ProtocolManager.protocols.remove(ProtocolCode.fromBytes(protocolHeader,protocolVersion));
+    public static Protocol unRegisterProtocol( JSONObject protocolCode) {
+        return ProtocolManager.protocols.remove(ProtocolCode.fromBytes(protocolCode));
     }
 
 

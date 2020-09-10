@@ -116,7 +116,7 @@ public class RpcHeartbeatTrigger implements HeartbeatTrigger {
                     public String getRemoteAddress() {
                         return ctx.channel().remoteAddress().toString();
                     }
-                }, null, protocolCode.getHeader(), protocolCode.getVersion(),this.commandFactory);
+                }, null, protocolCode,this.commandFactory);
             final int heartbeatId = heartbeat.getId();
             conn.addInvokeFuture(future);
             if (logger.isDebugEnabled()) {

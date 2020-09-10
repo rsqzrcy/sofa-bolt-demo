@@ -16,7 +16,12 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc.protocol;
 
+import com.alibaba.fastjson.JSONObject;
+import com.mfma.sofaboltdemo.sofabolt.Protocol;
+import com.mfma.sofaboltdemo.sofabolt.ProtocolCode;
 import com.mfma.sofaboltdemo.sofabolt.ProtocolManager;
+
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Protocol manager.
@@ -27,7 +32,7 @@ import com.mfma.sofaboltdemo.sofabolt.ProtocolManager;
 public class RpcProtocolManager {
     public static final int DEFAULT_PROTOCOL_CODE_LENGTH = 4;
 
-    public static void initProtocols() {
-        ProtocolManager.registerProtocol(new RpcProtocol(), RpcProtocol.PROTOCOL_HEADER, RpcProtocol.PROTOCOL_VERSION);
+    public static void initProtocols(ConcurrentMap<ProtocolCode, Protocol> protocolsMap) {
+        ProtocolManager.registerProtocol(protocolsMap);
     }
 }

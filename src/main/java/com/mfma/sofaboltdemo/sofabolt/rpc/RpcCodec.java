@@ -16,6 +16,7 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mfma.sofaboltdemo.protocol.ProtocolDecoder;
 import com.mfma.sofaboltdemo.sofabolt.ProtocolCode;
 import com.mfma.sofaboltdemo.sofabolt.codec.Codec;
@@ -32,11 +33,17 @@ public class RpcCodec implements Codec {
 
     @Override
     public ChannelHandler newEncoder() {
-        return new ProtocolCodeBasedEncoder(ProtocolCode.fromBytes(RpcProtocol.PROTOCOL_HEADER, RpcProtocol.PROTOCOL_VERSION));
+        JSONObject protocolCode = new JSONObject()
+                .fluentPut("protocolHeader",RpcProtocol.PROTOCOL_HEADER)
+                .fluentPut("protocolVersion", RpcProtocol.PROTOCOL_VERSION);
+        return new ProtocolCodeBasedEncoder(ProtocolCode.fromBytes(protocolCode));
     }
 
     @Override
     public ChannelHandler newDecoder() {
-        return new ProtocolDecoder(ProtocolCode.fromBytes(RpcProtocol.PROTOCOL_HEADER, RpcProtocol.PROTOCOL_VERSION));
+        JSONObject protocolCode = new JSONObject()
+                .fluentPut("protocolHeader",RpcProtocol.PROTOCOL_HEADER)
+                .fluentPut("protocolVersion", RpcProtocol.PROTOCOL_VERSION);
+        return new ProtocolDecoder(ProtocolCode.fromBytes(protocolCode));
     }
 }

@@ -16,6 +16,7 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.rpc;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mfma.sofaboltdemo.sofabolt.*;
 import com.mfma.sofaboltdemo.sofabolt.codec.Codec;
 import com.mfma.sofaboltdemo.sofabolt.config.BoltGenericOption;
@@ -24,6 +25,7 @@ import com.mfma.sofaboltdemo.sofabolt.config.switches.GlobalSwitch;
 import com.mfma.sofaboltdemo.sofabolt.constant.Constants;
 import com.mfma.sofaboltdemo.sofabolt.exception.RemotingException;
 import com.mfma.sofaboltdemo.sofabolt.log.BoltLoggerFactory;
+import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.RpcProtocolManager;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.UserProcessor;
 import com.mfma.sofaboltdemo.sofabolt.rpc.protocol.UserProcessorRegisterHelper;
 import com.mfma.sofaboltdemo.sofabolt.util.IoUtils;
@@ -50,6 +52,7 @@ import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.security.KeyStore;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -129,6 +132,9 @@ public class RpcServer extends AbstractRemotingServer {
      */
     private Codec codec = new RpcCodec();
 
+    private ConcurrentMap<ProtocolCode, Protocol> protocolsMap;
+
+
     static {
         if (workerGroup instanceof NioEventLoopGroup) {
             ((NioEventLoopGroup) workerGroup).setIoRatio(ConfigManager.netty_io_ratio());
@@ -168,8 +174,9 @@ public class RpcServer extends AbstractRemotingServer {
      * You can only use invoke methods with params {@link Connection}, for example {@link #invokeSync(Connection, Object, int)} <br>
      * Otherwise {@link UnsupportedOperationException} will be thrown.
      */
-    public RpcServer(int port) {
+    public RpcServer(int port, ConcurrentMap<ProtocolCode, Protocol> protocolsMap) {
         this(port, false);
+        this.protocolsMap = protocolsMap;
     }
 
     /**
@@ -253,7 +260,6 @@ public class RpcServer extends AbstractRemotingServer {
             ConnectionSelectStrategy connectionSelectStrategy = new RandomSelectStrategy(null);
             this.connectionManager = new DefaultServerConnectionManager(connectionSelectStrategy);
             this.connectionManager.startup();
-
             this.connectionEventHandler = new RpcConnectionEventHandler(switches());
             this.connectionEventHandler.setConnectionManager(this.connectionManager);
             this.connectionEventHandler.setConnectionEventListener(this.connectionEventListener);
@@ -261,6 +267,7 @@ public class RpcServer extends AbstractRemotingServer {
             this.connectionEventHandler = new ConnectionEventHandler(switches());
             this.connectionEventHandler.setConnectionEventListener(this.connectionEventListener);
         }
+        RpcProtocolManager.initProtocols(this.protocolsMap);
         initRpcRemoting();
         Integer tcpSoSndBuf = option(BoltGenericOption.TCP_SO_SNDBUF);
         Integer tcpSoRcvBuf = option(BoltGenericOption.TCP_SO_RCVBUF);
@@ -412,20 +419,20 @@ public class RpcServer extends AbstractRemotingServer {
     }
 
     /**
-     * @see RemotingServer#registerProcessor(String protocolHeader, String protocolVersion, com.mfma.sofaboltdemo.sofabolt.CommandCode, com.mfma.sofaboltdemo.sofabolt.RemotingProcessor)
+     * @see RemotingServer#registerProcessor(JSONObject protocolCode, com.mfma.sofaboltdemo.sofabolt.CommandCode, com.mfma.sofaboltdemo.sofabolt.RemotingProcessor)
      */
     @Override
-    public void registerProcessor(String protocolHeader, String protocolVersion, CommandCode cmd, RemotingProcessor<?> processor) {
-        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolHeader, protocolVersion)).getCommandHandler()
+    public void registerProcessor(JSONObject protocolCode, CommandCode cmd, RemotingProcessor<?> processor) {
+        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolCode)).getCommandHandler()
                 .registerProcessor(cmd, processor);
     }
 
     /**
-     * @see RemotingServer#registerDefaultExecutor(String protocolHeader, String protocolVersion, ExecutorService)
+     * @see RemotingServer#registerDefaultExecutor(JSONObject protocolCode, ExecutorService)
      */
     @Override
-    public void registerDefaultExecutor(String protocolHeader, String protocolVersion, ExecutorService executor) {
-        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolHeader, protocolVersion)).getCommandHandler()
+    public void registerDefaultExecutor(JSONObject protocolCode, ExecutorService executor) {
+        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolCode)).getCommandHandler()
                 .registerDefaultExecutor(executor);
     }
 

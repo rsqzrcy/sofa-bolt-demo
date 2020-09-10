@@ -53,7 +53,6 @@ public class Connection {
      * Attribute key for connection
      */
     public static final AttributeKey<Connection> CONNECTION = AttributeKey.valueOf("connection");
-
     /**
      * Attribute key for heartbeat count
      */
@@ -68,31 +67,25 @@ public class Connection {
      * Attribute key for protocol
      */
     public static final AttributeKey<ProtocolCode> PROTOCOL = AttributeKey.valueOf("protocol");
-    private ProtocolCode protocolCode;
+
+//    private ProtocolCode protocolCode;
 
     /**
      * Attribute key for version
      */
     public static final AttributeKey<String> VERSION = AttributeKey.valueOf("version");
 
-    private String version = RpcProtocol.PROTOCOL_VERSION;
+//    private byte version = RpcProtocolV2.PROTOCOL_VERSION_1;
 
     private Url url;
 
-    /**
-     * {id:poolKey}
-     */
-    private final ConcurrentHashMap<Integer, String> id2PoolKey = new ConcurrentHashMap<Integer, String>(256);
+    private final ConcurrentHashMap<Integer/* id */, String/* poolKey */> id2PoolKey = new ConcurrentHashMap<Integer, String>(256);
 
     private Set<String> poolKeys = new ConcurrentHashSet<String>();
 
     private AtomicBoolean closed = new AtomicBoolean(false);
 
-    /**
-     * attr key
-     * attr value
-     */
-    private final ConcurrentHashMap<String, Object> attributes = new ConcurrentHashMap<String, Object>();
+    private final ConcurrentHashMap<String/* attr key*/, Object /*attr value*/> attributes = new ConcurrentHashMap<String, Object>();
 
     /**
      * the reference count used for this connection. If equals 2, it means this connection has been referenced 2 times
@@ -124,41 +117,48 @@ public class Connection {
         this(channel);
         this.url = url;
         this.poolKeys.add(url.getUniqueKey());
-    }
-
-    /**
-     * Constructor
-     *
-     * @param channel      associated channel
-     * @param protocolCode ProtocolCode
-     * @param url          associated url
-     */
-    public Connection(Channel channel, ProtocolCode protocolCode, Url url) {
-        this(channel, url);
-        this.protocolCode = protocolCode;
         this.init();
     }
 
-    /**
-     * @param channel      associated channel
-     * @param protocolCode ProtocolCode
-     * @param version      protocol version
-     * @param url          associated url
-     */
-    public Connection(Channel channel, ProtocolCode protocolCode, String version, Url url) {
-        this(channel, url);
-        this.protocolCode = protocolCode;
-        this.version = version;
-        this.init();
-    }
+
+//    public Connection(Channel channel, ProtocolCode protocolCode, Url url) {
+//        this(channel, url);
+//        this.init();
+//    }
+
+//    /**
+//     * Constructor
+//     *
+//     * @param channel      associated channel
+//     * @param protocolCode ProtocolCode
+//     * @param url          associated url
+//     */
+//    public Connection(Channel channel, ProtocolCode protocolCode, Url url) {
+//        this(channel, url);
+//        this.protocolCode = protocolCode;
+//        this.init();
+//    }
+
+//    /**
+//     * @param channel      associated channel
+//     * @param protocolCode ProtocolCode
+//     * @param version      protocol version
+//     * @param url          associated url
+//     */
+//    public Connection(Channel channel, ProtocolCode protocolCode, byte version, Url url) {
+//        this(channel, url);
+//        this.protocolCode = protocolCode;
+//        this.version = version;
+//        this.init();
+//    }
 
     /**
      * Initialization.
      */
     private void init() {
         this.channel.attr(HEARTBEAT_COUNT).set(0);
-        this.channel.attr(PROTOCOL).set(this.protocolCode);
-        this.channel.attr(VERSION).set(this.version);
+//        this.channel.attr(PROTOCOL).set(this.protocolCode);
+//        this.channel.attr(VERSION).set(this.version);
         this.channel.attr(HEARTBEAT_SWITCH).set(true);
     }
 

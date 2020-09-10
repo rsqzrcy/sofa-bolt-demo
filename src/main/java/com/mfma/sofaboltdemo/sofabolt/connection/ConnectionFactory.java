@@ -16,6 +16,7 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.connection;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mfma.sofaboltdemo.sofabolt.Connection;
 import com.mfma.sofaboltdemo.sofabolt.ConnectionEventHandler;
 import com.mfma.sofaboltdemo.sofabolt.Url;
@@ -50,8 +51,7 @@ public interface ConnectionFactory {
      * @param connectTimeout connect timeout in millisecond
      * @return connection
      */
-    Connection createConnection(String targetIP, int targetPort, int connectTimeout)
-                                                                                    throws Exception;
+
 
     /**
      * Create a connection according to the IP and port.
@@ -60,10 +60,8 @@ public interface ConnectionFactory {
      *
      * @param targetIP target ip
      * @param targetPort target port
-     * @param version protocol version
      * @param connectTimeout connect timeout in millisecond
      * @return connection
      */
-    Connection createConnection(String targetIP, int targetPort, String version, int connectTimeout)
-                                                                                                  throws Exception;
+    Connection createConnection(String targetIP, int targetPort, int connectTimeout) throws Exception;
 }

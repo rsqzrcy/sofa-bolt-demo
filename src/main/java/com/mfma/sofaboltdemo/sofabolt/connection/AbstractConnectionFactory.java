@@ -16,6 +16,7 @@
  */
 package com.mfma.sofaboltdemo.sofabolt.connection;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mfma.sofaboltdemo.sofabolt.*;
 import com.mfma.sofaboltdemo.sofabolt.codec.Codec;
 import com.mfma.sofaboltdemo.sofabolt.config.ConfigManager;
@@ -54,20 +55,18 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class AbstractConnectionFactory implements ConnectionFactory {
 
-    private static final Logger         logger      = BoltLoggerFactory
-                                                        .getLogger(AbstractConnectionFactory.class);
+    private static final Logger logger = BoltLoggerFactory.getLogger(AbstractConnectionFactory.class);
 
     private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime
-                                                        .getRuntime().availableProcessors() + 1,
-                                                        new NamedThreadFactory(
-                                                            "bolt-netty-client-worker", true));
+            .getRuntime().availableProcessors() + 1, new NamedThreadFactory(
+            "bolt-netty-client-worker", true));
 
-    private final ConfigurableInstance  confInstance;
-    private final Codec                 codec;
-    private final ChannelHandler        heartbeatHandler;
-    private final ChannelHandler        handler;
+    private final ConfigurableInstance confInstance;
+    private final Codec codec;
+    private final ChannelHandler heartbeatHandler;
+    private final ChannelHandler handler;
 
-    protected Bootstrap                 bootstrap;
+    protected Bootstrap bootstrap;
 
     public AbstractConnectionFactory(Codec codec, ChannelHandler heartbeatHandler,
                                      ChannelHandler handler, ConfigurableInstance confInstance) {
@@ -88,11 +87,11 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
     public void init(final ConnectionEventHandler connectionEventHandler) {
         bootstrap = new Bootstrap();
         bootstrap.group(workerGroup).channel(NettyEventLoopUtil.getClientSocketChannelClass())
-            .option(ChannelOption.TCP_NODELAY, ConfigManager.tcp_nodelay())
-            .option(ChannelOption.SO_REUSEADDR, ConfigManager.tcp_so_reuseaddr())
-            .option(ChannelOption.SO_KEEPALIVE, ConfigManager.tcp_so_keepalive())
-            .option(ChannelOption.SO_SNDBUF, ConfigManager.tcp_so_sndbuf())
-            .option(ChannelOption.SO_RCVBUF, ConfigManager.tcp_so_rcvbuf());
+                .option(ChannelOption.TCP_NODELAY, ConfigManager.tcp_nodelay())
+                .option(ChannelOption.SO_REUSEADDR, ConfigManager.tcp_so_reuseaddr())
+                .option(ChannelOption.SO_KEEPALIVE, ConfigManager.tcp_so_keepalive())
+                .option(ChannelOption.SO_SNDBUF, ConfigManager.tcp_so_sndbuf())
+                .option(ChannelOption.SO_RCVBUF, ConfigManager.tcp_so_rcvbuf());
 
         // init netty write buffer water mark
         initWriteBufferWaterMark();
@@ -105,7 +104,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
         }
 
         final boolean flushConsolidationSwitch = this.confInstance.switches().isOn(
-            GlobalSwitch.CODEC_FLUSH_CONSOLIDATION);
+                GlobalSwitch.CODEC_FLUSH_CONSOLIDATION);
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
 
             @Override
@@ -118,7 +117,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
                 }
                 if (flushConsolidationSwitch) {
                     pipeline.addLast("flushConsolidationHandler", new FlushConsolidationHandler(
-                        1024, true));
+                            1024, true));
                 }
                 pipeline.addLast("decoder", codec.newDecoder());
                 pipeline.addLast("encoder", codec.newEncoder());
@@ -126,8 +125,8 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
                 boolean idleSwitch = ConfigManager.tcp_idle_switch();
                 if (idleSwitch) {
                     pipeline.addLast("idleStateHandler",
-                        new IdleStateHandler(ConfigManager.tcp_idle(), ConfigManager.tcp_idle(), 0,
-                            TimeUnit.MILLISECONDS));
+                            new IdleStateHandler(ConfigManager.tcp_idle(), ConfigManager.tcp_idle(), 0,
+                                    TimeUnit.MILLISECONDS));
                     pipeline.addLast("heartbeatHandler", heartbeatHandler);
                 }
 
@@ -140,8 +139,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
     @Override
     public Connection createConnection(Url url) throws Exception {
         Channel channel = doCreateConnection(url.getIp(), url.getPort(), url.getConnectTimeout());
-        Connection conn = new Connection(channel, ProtocolCode.fromBytes(url.getProtocol(),url.getVersion()),
-            url.getVersion(), url);
+        Connection conn = new Connection(channel, url);
         if (channel.isActive()) {
             channel.pipeline().fireUserEventTriggered(ConnectionEventType.CONNECT);
         } else {
@@ -151,12 +149,9 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
     }
 
     @Override
-    public Connection createConnection(String targetIP, int targetPort, int connectTimeout)
-                                                                                           throws Exception {
+    public Connection createConnection(String targetIP, int targetPort, int connectTimeout) throws Exception {
         Channel channel = doCreateConnection(targetIP, targetPort, connectTimeout);
-        Connection conn = new Connection(channel,
-            ProtocolCode.fromBytes(RpcProtocol.PROTOCOL_HEADER, RpcProtocol.PROTOCOL_VERSION), RpcProtocol.PROTOCOL_VERSION,
-            new Url(targetIP, targetPort));
+        Connection conn = new Connection(channel, new Url(targetIP, targetPort));
         if (channel.isActive()) {
             channel.pipeline().fireUserEventTriggered(ConnectionEventType.CONNECT);
         } else {
@@ -165,20 +160,6 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
         return conn;
     }
 
-    @Override
-    public Connection createConnection(String targetIP, int targetPort, String version,
-                                       int connectTimeout) throws Exception {
-        Channel channel = doCreateConnection(targetIP, targetPort, connectTimeout);
-        Connection conn = new Connection(channel,
-            ProtocolCode.fromBytes(RpcProtocol.PROTOCOL_HEADER, RpcProtocol.PROTOCOL_VERSION), version, new Url(targetIP,
-                targetPort));
-        if (channel.isActive()) {
-            channel.pipeline().fireUserEventTriggered(ConnectionEventType.CONNECT);
-        } else {
-            channel.pipeline().fireUserEventTriggered(ConnectionEventType.CONNECT_FAILED);
-        }
-        return conn;
-    }
 
     /**
      * init netty write buffer water mark
@@ -188,17 +169,17 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
         int highWaterMark = this.confInstance.netty_buffer_high_watermark();
         if (lowWaterMark > highWaterMark) {
             throw new IllegalArgumentException(
-                String
-                    .format(
-                        "[client side] bolt netty high water mark {%s} should not be smaller than low water mark {%s} bytes)",
-                        highWaterMark, lowWaterMark));
+                    String
+                            .format(
+                                    "[client side] bolt netty high water mark {%s} should not be smaller than low water mark {%s} bytes)",
+                                    highWaterMark, lowWaterMark));
         } else {
             logger.warn(
-                "[client side] bolt netty low water mark is {} bytes, high water mark is {} bytes",
-                lowWaterMark, highWaterMark);
+                    "[client side] bolt netty low water mark is {} bytes, high water mark is {} bytes",
+                    lowWaterMark, highWaterMark);
         }
         this.bootstrap.option(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(
-            lowWaterMark, highWaterMark));
+                lowWaterMark, highWaterMark));
     }
 
     private SslContext initSSLContext() {
@@ -209,7 +190,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
             char[] passChs = RpcConfigManager.client_ssl_keystore_pass().toCharArray();
             ks.load(in, passChs);
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(RpcConfigManager
-                .client_ssl_tmf_algorithm());
+                    .client_ssl_tmf_algorithm());
             tmf.init(ks);
             return SslContextBuilder.forClient().trustManager(tmf).build();
         } catch (Exception e) {
@@ -222,7 +203,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
     }
 
     protected Channel doCreateConnection(String targetIP, int targetPort, int connectTimeout)
-                                                                                             throws Exception {
+            throws Exception {
         // prevent unreasonable value, at least 1000
         connectTimeout = Math.max(connectTimeout, 1000);
         String address = targetIP + ":" + targetPort;
